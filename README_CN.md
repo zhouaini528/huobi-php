@@ -8,6 +8,11 @@ Huobi 文档地址 [https://github.com/huobiapi/API_Docs/wiki/REST_api_reference
 
 [English document](https://github.com/zhouaini528/huobi-php/blob/master/README.md)
 
+### 其他交易所API
+[Bitmex](https://packagist.org/packages/linwj/bitmex)
+[Okex](https://packagist.org/packages/linwj/okex)
+[Huobi](https://packagist.org/packages/linwj/huobi)
+
 ### Spot Trading API
 
 Market related API [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/market.php)
