@@ -10,7 +10,7 @@ Many interfaces are not yet complete, and users can continue to extend them base
 
 ### Spot Trading API
 
-Market related API [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/instrument.php)
+Market related API [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/market.php)
 ```php
 $huobi=new HuobiSpot();
 
@@ -36,17 +36,16 @@ try {
 
 Order related API [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/order.php)
 ```php
-$huobi=new huobiSpot($key,$secret,$passphrase);
+$huobi=new HuobiSpot($key,$secret);
+
 //Place an Order
 try {
-    $result=$huobi->order()->post([
-        'instrument_id'=>'btc-usdt',
-        'side'=>'buy',
+    $result=$huobi->order()->postPlace([
+        'account-id'=>$account_id,
+        'symbol'=>'btcusdt',
+        'type'=>'buy-limit',
+        'amount'=>'0.001',
         'price'=>'100',
-        'size'=>'0.001',
-        
-        //'type'=>'market',
-        //'notional'=>'100'
     ]);
     print_r($result);
 }catch (\Exception $e){
@@ -57,8 +56,7 @@ sleep(1);
 //Get order details by order ID.
 try {
     $result=$huobi->order()->get([
-        'instrument_id'=>'btc-usdt',
-        'order_id'=>$result['order_id'],
+        'order-id'=>$result['data'],
     ]);
     print_r($result);
 }catch (\Exception $e){
@@ -68,9 +66,8 @@ sleep(1);
 
 //Cancelling an unfilled order.
 try {
-    $result=$huobi->order()->postCancel([
-        'instrument_id'=>'btc-usdt',
-        'order_id'=>$result['order_id'],
+    $result=$huobi->order()->postSubmitCancel([
+        'order-id'=>$result['data']['id'],
     ]);
     print_r($result);
 }catch (\Exception $e){
@@ -80,32 +77,20 @@ try {
 
 Accounts related API [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/accounts.php)
 ```php
-$huobi=new huobiSpot($key,$secret,$passphrase);
+$huobi=new HuobiSpot($key,$secret);
 
-//This endpoint supports getting the list of assets(only show pairs with balance larger than 0), 
-//The balances, amount available/on hold in spot accounts.
+//get the status of an account
 try {
-    $result=$huobi->account()->getAll();
+    $result=$huobi->account()->get();
     print_r($result);
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
 }
 
-//This endpoint supports getting the balance, amount available/on hold of a token in spot account.
+//Get the balance of an account
 try {
-    $result=$huobi->account()->get([
-        'currency'=>'BTC'
-    ]);
-    print_r($result);
-}catch (\Exception $e){
-    print_r(json_decode($e->getMessage(),true));
-}
-
-//All paginated requests return the latest information (newest) as the first page sorted by newest (in chronological time) first.
-try {
-    $result=$huobi->account()->getLedger([
-        'currency'=>'btc',
-        'limit'=>2,
+    $result=$huobi->account()->getBalance([
+        'account-id'=>$result['data'][0]['id']
     ]);
     print_r($result);
 }catch (\Exception $e){
@@ -119,10 +104,4 @@ try {
 [More API](https://github.com/zhouaini528/huobi-php/tree/master/src/Api/Spot)
 
 ### Futures Trading API
-being developed
-### Margin Trading API
-being developed
-### Futures Trading API
-being developed
-### Perpetual Swap API
 being developed
