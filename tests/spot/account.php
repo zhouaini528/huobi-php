@@ -13,27 +13,25 @@ use Lin\Huobi\HuobiSpot;
 
 require __DIR__ .'../../../vendor/autoload.php';
 
-$huobi=new HuobiSpot();
+include 'key_secret.php';
 
-//Get market data. This endpoint provides the snapshots of market data and can be used without verifications.
+$huobi=new HuobiSpot($key,$secret);
+
+//get the status of an account
 try {
-    $result=$huobi->market()->getDepth([
-        'symbol'=>'btcusdt',
-        //'type'=>'step3'   default step0
+    $result=$huobi->account()->get();
+    print_r($result);
+}catch (\Exception $e){
+    print_r(json_decode($e->getMessage(),true));
+}
+
+//Get the balance of an account
+try {
+    $result=$huobi->account()->getBalance([
+        'account-id'=>$result['data'][0]['id']
     ]);
     print_r($result);
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
 }
-
-//List trading pairs and get the trading limit, price, and more information of different trading pairs.
-try {
-    $result=$huobi->market()->getTickers();
-    print_r($result);
-}catch (\Exception $e){
-    print_r(json_decode($e->getMessage(),true));
-}
-
-
-
 
