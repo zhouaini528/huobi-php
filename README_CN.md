@@ -75,7 +75,7 @@ try {
 }
 ```
 
-Accounts related API [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/accounts.php)
+Accounts related API [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/account.php)
 ```php
 $huobi=new HuobiSpot($key,$secret);
 
