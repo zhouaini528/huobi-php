@@ -9,45 +9,40 @@
  * Most of them are unfinished and need your help
  * https://github.com/zhouaini528/okex-php.git
  * */
-use Lin\Okex\OkexFuture;
+use Lin\Huobi\HuobiFuture;
 
 require __DIR__ .'../../../vendor/autoload.php';
 
 include 'key_secret.php';
 
-$okex=new OkexFuture($key,$secret,$passphrase);
+$huobi=new HuobiFuture();
 
-//Place an Order
+//The Last Trade of a Contract
 try {
-    $result=$okex->order()->post([
-        'instrument_id'=>'btc-usd-190628',
-        'type'=>'1',
-        'price'=>'100',
-        'size'=>'1',
+    $result=$huobi->market()->getTrade([
+        'symbol'=>'BTC_CQ'
     ]);
     print_r($result);
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
 }
-sleep(1);
 
-//Get order details by order ID.
+//Request a Batch of Trade Records of a Contract
 try {
-    $result=$okex->order()->get([
-        'instrument_id'=>'btc-usd-190628',
-        'order_id'=>$result['order_id'],
+    $result=$huobi->market()->getHistoryTrade([
+        'symbol'=>'BTC_CQ',
+        //'size'=>100
     ]);
     print_r($result);
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
 }
-sleep(1);
 
-//Cancelling an unfilled order.
+//Get Market Depth
 try {
-    $result=$okex->order()->postCancel([
-        'instrument_id'=>'btc-usd-190628',
-        'order_id'=>$result['order_id'],
+    $result=$huobi->market()->getDepth([
+        'symbol'=>'BTC_CQ',
+        'type'=>'step1'
     ]);
     print_r($result);
 }catch (\Exception $e){

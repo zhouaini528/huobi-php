@@ -7,18 +7,19 @@ namespace Lin\Huobi;
 
 
 
+use Lin\Huobi\Api\Futures\Contract;
+use Lin\Huobi\Api\Futures\Market;
+
 class HuobiFuture
 {
     protected $key;
     protected $secret;
-    protected $passphrase;
     protected $host;
     
-    function __construct(string $key='',string $secret='',string $passphrase='',string $host='https://api.huobi.pro'){
+    function __construct(string $key='',string $secret='',string $host='https://api.hbdm.com'){
         $this->key=$key;
         $this->secret=$secret;
         $this->host=$host;
-        $this->passphrase=$passphrase;
     }
     
     /**
@@ -28,10 +29,22 @@ class HuobiFuture
         return [
             'key'=>$this->key,
             'secret'=>$this->secret,
-            'passphrase'=>$this->passphrase,
             'host'=>$this->host,
         ];
     }
     
+    /**
+     * 
+     * */
+    public function contract(){
+        return new Contract($this->init());
+    }
+    
+    /**
+     *
+     * */
+    public function market(){
+        return new Market($this->init());
+    }
     
 }
