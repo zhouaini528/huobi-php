@@ -36,7 +36,33 @@ try {
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
 }
-die;
+
+//Get Information of an Order
+try {
+    $result=$huobi->contract()->postOrderInfo([
+        'order_id'=>'xxxx',//You can also 'xxxx,xxxx,xxxx' multiple ID
+        //'client_order_id'=>'xxxx',
+        'symbol'=>'BTC'
+    ]);
+    print_r($result);
+}catch (\Exception $e){
+    print_r(json_decode($e->getMessage(),true));
+}
+
+//Cancel an Order
+try {
+    $result=$huobi->contract()->postCancel([
+        'order_id'=>'xxxx',//You can also 'xxxx,xxxx,xxxx' multiple ID
+        //'client_order_id'=>'xxxx',
+        'symbol'=>'BTC'
+    ]);
+    print_r($result);
+}catch (\Exception $e){
+    print_r(json_decode($e->getMessage(),true));
+}
+
+
+
 //User`s position Information
 try {
     $result=$huobi->contract()->postPositionInfo();

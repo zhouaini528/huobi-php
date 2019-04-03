@@ -100,30 +100,51 @@ class Contract extends Request
         return $this->exec();
     }
     
+    /**
+     * 
+     * */
     public function postBatchOrder(array $data){
-        $this->type='GET';
-        $this->path='';
+        $this->type='POST';
+        $this->path='/api/v1/contract_batchorder';
         $this->data=$data;
         return $this->exec();
     }
     
+    /**
+     * 撤销订单
+        URL api/v1/contract_cancel
+        
+        参数名称	是否必须	类型	描述
+        order_id	false	string	订单ID（ 多个订单ID中间以","分隔,一次最多允许撤消50个订单 ）
+        client_order_id	false	string	客户订单ID(多个订单ID中间以","分隔,一次最多允许撤消50个订单)
+        symbol	true	string	"BTC","ETH"...
+     * */
     public function postCancel(array $data){
-        $this->type='GET';
-        $this->path='';
+        $this->type='POST';
+        $this->path='/api/v1/contract_cancel';
         $this->data=$data;
         return $this->exec();
     }
     
+    /**
+     * symbol	true	string	品种代码，如"BTC","ETH"...
+     * */
     public function postCancelAll(array $data){
-        $this->type='GET';
-        $this->path='';
+        $this->type='POST';
+        $this->path='/api/v1/contract_cancelall';
         $this->data=$data;
         return $this->exec();
     }
     
+    /**
+     * 获取合约订单信息
+     * order_id	 false	string	订单ID（ 多个订单ID中间以","分隔,一次最多允许查询20个订单 ）
+        client_order_id	false	string	客户订单ID(多个订单ID中间以","分隔,一次最多允许查询20个订单)
+        symbol	true	string	"BTC","ETH"...
+     * */
     public function postOrderInfo(array $data){
-        $this->type='GET';
-        $this->path='';
+        $this->type='POST';
+        $this->path='/api/v1/contract_order_info';
         $this->data=$data;
         return $this->exec();
     }
