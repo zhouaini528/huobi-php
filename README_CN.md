@@ -21,7 +21,7 @@ Huobi 文档地址 [https://github.com/huobiapi/API_Docs/wiki/REST_api_reference
 composer require "linwj/huobi dev-master"
 ```
 
-### Spot Trading API
+### 现货交易 API
 
 Market related API [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/market.php)
 ```php
@@ -116,7 +116,7 @@ try {
 
 [更多API](https://github.com/zhouaini528/huobi-php/tree/master/src/Api/Spot)
 
-### Futures Trading API
+### 期货交易 API
 
 Contract related API [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/future/contract.php)
 
