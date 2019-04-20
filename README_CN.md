@@ -18,6 +18,8 @@ Huobi 文档地址 [https://github.com/huobiapi/API_Docs/wiki/REST_api_reference
 
 [Binance](https://github.com/zhouaini528/binance-php)
 
+[Exchanges](https://github.com/zhouaini528/exchanges-php) All integration
+
 #### 安装方式
 ```
 composer require "linwj/huobi dev-master"
