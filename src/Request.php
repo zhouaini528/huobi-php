@@ -140,7 +140,10 @@ class Request
         
         //可以记录日志
         try {
-            return json_decode($this->send(),true);
+            $temp=json_decode($this->send(),true);
+            if(isset($temp['status']) && $temp['status']=='error') throw new Exception(json_encode($temp));
+            
+            return $temp;
         }catch (RequestException $e){
             if(method_exists($e->getResponse(),'getBody')){
                 $contents=$e->getResponse()->getBody()->getContents();
