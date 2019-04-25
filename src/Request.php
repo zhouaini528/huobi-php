@@ -141,7 +141,12 @@ class Request
         //可以记录日志
         try {
             $temp=json_decode($this->send(),true);
-            if(isset($temp['status']) && $temp['status']=='error') throw new Exception(json_encode($temp));
+            if(isset($temp['status']) && $temp['status']=='error') {
+                $temp['_method']=$this->type;
+                $temp['_url']=$this->host.$this->path;
+                $temp['_httpcode']=200;
+                throw new Exception(json_encode($temp));
+            }
             
             return $temp;
         }catch (RequestException $e){
