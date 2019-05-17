@@ -25,6 +25,20 @@ Many interfaces are not yet complete, and users can continue to extend them base
 composer require "linwj/huobi dev-master"
 ```
 
+Local development sets the proxy [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/proxy.php#L21)
+```php
+$huobi=new HuobiSpot();
+
+//If you are developing locally and need an agent, you can set this
+$huobi->setProxy();
+
+//More flexible Settings
+$huobi->setProxy([
+    'http'  => 'http://127.0.0.1:12333',
+    'https' => 'http://127.0.0.1:12333',
+]);
+```
+
 ### Spot Trading API
 
 Market related API [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/market.php)
