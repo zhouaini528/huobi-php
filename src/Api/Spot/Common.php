@@ -16,7 +16,7 @@ class Common extends Request
      * */
     public function getSymbols(array $data){
         $this->type='GET';
-        $this->path='';
+        $this->path='/v1/common/symbols';
         $this->data=$data;
         return $this->exec();
     }
