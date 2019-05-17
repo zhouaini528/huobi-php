@@ -20,6 +20,8 @@ class HuobiSpot
     protected $secret;
     protected $host;
     
+    protected $proxy=false;
+    
     function __construct(string $key='',string $secret='',string $host='https://api.huobi.pro'){
         $this->key=$key;
         $this->secret=$secret;
@@ -38,58 +40,91 @@ class HuobiSpot
     }
     
     /**
+     * Local development sets the proxy
+     * @param bool|array
+     * $proxy=false Default
+     * $proxy=true  Local proxy http://127.0.0.1:12333
+     *
+     * Manual proxy
+     * $proxy=[
+     'http'  => 'http://127.0.0.1:12333',
+     'https' => 'http://127.0.0.1:12333',
+     'no'    =>  ['.cn']
+     * ]
+     * */
+    function setProxy($proxy=true){
+        $this->proxy=$proxy;
+    }
+    
+    /**
      * 
      * */
     public function account(){
-        return new Account($this->init());
+        $account= new Account($this->init());
+        $account->proxy($this->proxy);
+        return $account;
     }
     
     /**
      *
      * */
     public function common(){
-        return new Common($this->init());
+        $common= new Common($this->init());
+        $common->proxy($this->proxy);
+        return $common;
     }
     
     /**
      *
      * */
     public function dw(){
-        return new Dw($this->init());
+        $dw= new Dw($this->init());
+        $dw->proxy($this->proxy);
+        return $dw;
     }
     
     /**
      *
      * */
     public function etf(){
-        return new Etf($this->init());
+        $etf= new Etf($this->init());
+        $etf->proxy($this->proxy);
+        return $etf;
     }
     
     /**
      *
      * */
     public function margin(){
-        return new Margin($this->init());
+        $margin= new Margin($this->init());
+        $margin->proxy($this->proxy);
+        return $margin;
     }
     
     /**
      *
      * */
     public function market(){
-        return new Market($this->init());
+        $market= new Market($this->init());
+        $market->proxy($this->proxy);
+        return $market;
     }
     
     /**
      *
      * */
     public function order(){
-        return new Order($this->init());
+        $order= new Order($this->init());
+        $order->proxy($this->proxy);
+        return $order;
     }
     
     /**
      *
      * */
     public function subuser(){
-        return new Subuser($this->init());
+        $subuser= new Subuser($this->init());
+        $subuser->proxy($this->proxy);
+        return $subuser;
     }
 }

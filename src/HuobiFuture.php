@@ -16,6 +16,8 @@ class HuobiFuture
     protected $secret;
     protected $host;
     
+    protected $proxy=false;
+    
     function __construct(string $key='',string $secret='',string $host='https://api.hbdm.com'){
         $this->key=$key;
         $this->secret=$secret;
@@ -34,17 +36,38 @@ class HuobiFuture
     }
     
     /**
+     * Local development sets the proxy
+     * @param bool|array
+     * $proxy=false Default
+     * $proxy=true  Local proxy http://127.0.0.1:12333
+     *
+     * Manual proxy
+     * $proxy=[
+     'http'  => 'http://127.0.0.1:12333',
+     'https' => 'http://127.0.0.1:12333',
+     'no'    =>  ['.cn']
+     * ]
+     * */
+    function setProxy($proxy=true){
+        $this->proxy=$proxy;
+    }
+    
+    /**
      * 
      * */
     public function contract(){
-        return new Contract($this->init());
+        $contract= new Contract($this->init());
+        $contract->proxy($this->proxy);
+        return $contract;
     }
     
     /**
      *
      * */
     public function market(){
-        return new Market($this->init());
+        $market= new Market($this->init());
+        $market->proxy($this->proxy);
+        return $market;
     }
     
 }
