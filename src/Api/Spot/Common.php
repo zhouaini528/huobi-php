@@ -14,7 +14,7 @@ class Common extends Request
     /**
      *
      * */
-    public function getSymbols(array $data){
+    public function getSymbols(array $data=[]){
         $this->type='GET';
         $this->path='/v1/common/symbols';
         $this->data=$data;
@@ -24,9 +24,9 @@ class Common extends Request
     /**
      *
      * */
-    public function getCurrencys(array $data){
+    public function getCurrencys(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/v1/common/currencys';
         $this->data=$data;
         return $this->exec();
     }
@@ -34,7 +34,7 @@ class Common extends Request
     /**
      *
      * */
-    public function getTimestamp(array $data){
+    public function getTimestamp(array $data=[]){
         $this->type='GET';
         $this->path='';
         $this->data=$data;
