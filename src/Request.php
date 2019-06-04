@@ -79,8 +79,8 @@ class Request
         $param=$this->sort($param);
         
         $host_tmp=explode('https://', $this->host);
-        $temp=$this->type . "\n" . $host_tmp[1] . "\n" . $this->path . "\n" . implode('&', $param);
-        $signature=base64_encode(hash_hmac('sha256', $temp, $this->secret, true));
+        if(isset($host_tmp[1])) $temp=$this->type . "\n" . $host_tmp[1] . "\n" . $this->path . "\n" . implode('&', $param);
+        $signature=base64_encode(hash_hmac('sha256', $temp ?? '', $this->secret, true));
         
         $param[]="Signature=" . urlencode($signature);
         
