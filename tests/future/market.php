@@ -16,11 +16,12 @@ require __DIR__ .'../../../vendor/autoload.php';
 include 'key_secret.php';
 
 $huobi=new HuobiFuture();
+$huobi->setProxy();
 
 //The Last Trade of a Contract
 try {
     $result=$huobi->market()->getTrade([
-        'symbol'=>'BTC_CQ'
+        'symbol'=>'XRP_CQ'
     ]);
     print_r($result);
 }catch (\Exception $e){
@@ -30,7 +31,7 @@ try {
 //Request a Batch of Trade Records of a Contract
 try {
     $result=$huobi->market()->getHistoryTrade([
-        'symbol'=>'BTC_CQ',
+        'symbol'=>'XRP_CQ',
         //'size'=>100
     ]);
     print_r($result);
@@ -41,7 +42,7 @@ try {
 //Get Market Depth
 try {
     $result=$huobi->market()->getDepth([
-        'symbol'=>'BTC_CQ',
+        'symbol'=>'XRP_CQ',
         'type'=>'step1'
     ]);
     print_r($result);

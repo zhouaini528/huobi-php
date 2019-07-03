@@ -93,7 +93,7 @@ class Contract extends Request
         $this->type='POST';
         $this->path='/api/v1/contract_order';
         
-        $data['lever_rate']=$data['order_price_type'] ?? 10;
+        $data['lever_rate']=$data['lever_rate'] ?? 10;
         $data['order_price_type']=$data['order_price_type'] ?? 'limit';
         
         $this->data=$data;
