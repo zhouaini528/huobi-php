@@ -17,6 +17,9 @@ include 'key_secret.php';
 
 $huobi=new HuobiSpot($key,$secret);
 
+//Set the request timeout to 60 seconds by default
+$huobi->setTimeOut(11);
+
 //get the status of an account
 try {
     $result=$huobi->account()->get();

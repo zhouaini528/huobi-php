@@ -16,7 +16,10 @@ require __DIR__ .'../../../vendor/autoload.php';
 include 'key_secret.php';
 
 $huobi=new HuobiFuture($key,$secret);
-$huobi->setProxy();
+//$huobi->setProxy();
+
+//Set the request timeout to 60 seconds by default
+$huobi->setTimeOut(11);
 
 //Place an Order
 try {

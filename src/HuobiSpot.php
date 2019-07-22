@@ -21,6 +21,7 @@ class HuobiSpot
     protected $host;
     
     protected $proxy=false;
+    protected $timeout=60;
     
     function __construct(string $key='',string $secret='',string $host='https://api.huobi.pro'){
         $this->key=$key;
@@ -36,6 +37,7 @@ class HuobiSpot
             'key'=>$this->key,
             'secret'=>$this->secret,
             'host'=>$this->host,
+            'timeout'=>$this->timeout,
         ];
     }
     
@@ -54,6 +56,13 @@ class HuobiSpot
      * */
     function setProxy($proxy=true){
         $this->proxy=$proxy;
+    }
+    
+    /**
+     * Set the request timeout to 60 seconds by default
+     * */
+    function setTimeOut($timeout=60){
+        $this->timeout=$timeout;
     }
     
     /**
