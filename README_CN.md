@@ -1,6 +1,6 @@
 ### 建议您先阅读官方文档
 
-Huobi 文档地址 [https://github.com/huobiapi/API_Docs/wiki/REST_api_reference](https://github.com/huobiapi/API_Docs/wiki/REST_api_reference)
+Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huobiapi.github.io/docs/spot/v1/cn/#api)
 
 所有接口方法的初始化都与huobi提供的方法相同。更多细节 [src/api](https://github.com/zhouaini528/huobi-php/tree/master/src/Api)
 
