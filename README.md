@@ -1,6 +1,6 @@
 ### It is recommended that you read the official document first
 
-Huobi docs [https://github.com/huobiapi/API_Docs_en/wiki/REST_Reference](https://github.com/huobiapi/API_Docs_en/wiki/REST_Reference)
+Huobi docs [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huobiapi.github.io/docs/spot/v1/cn/#api)
 
 All interface methods are initialized the same as those provided by huobi. See details [src/api](https://github.com/zhouaini528/huobi-php/tree/master/src/Api)
 
