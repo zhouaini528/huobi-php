@@ -13,6 +13,8 @@ use Lin\Huobi\Api\Spot\Etf;
 use Lin\Huobi\Api\Spot\Dw;
 use Lin\Huobi\Api\Spot\Common;
 use Lin\Huobi\Api\Spot\Account;
+use Lin\Huobi\Api\Spot\Futures;
+use Lin\Huobi\Api\Spot\Fee;
 
 class HuobiSpot
 {
@@ -135,5 +137,23 @@ class HuobiSpot
         $subuser= new Subuser($this->init());
         $subuser->proxy($this->proxy);
         return $subuser;
+    }
+    
+    /**
+     *
+     * */
+    public function futures(){
+        $futures = new Futures($this->init());
+        $futures->proxy($this->proxy);
+        return $futures;
+    }
+    
+    /**
+     *
+     * */
+    public function fee(){
+        $fee = new Fee($this->init());
+        $fee->proxy($this->proxy);
+        return $fee;
     }
 }

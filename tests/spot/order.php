@@ -17,6 +17,10 @@ include 'key_secret.php';
 
 $huobi=new HuobiSpot($key,$secret);
 
+$huobi->setProxy();
+
+$huobi->setTimeOut(10);
+
 //Place an Order
 try {
     $result=$huobi->order()->postPlace([
@@ -24,7 +28,7 @@ try {
         'symbol'=>'btcusdt',
         'type'=>'buy-limit',
         'amount'=>'0.001',
-        'price'=>'100',
+        'price'=>'1000',
     ]);
     print_r($result);
 }catch (\Exception $e){
