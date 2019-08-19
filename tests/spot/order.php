@@ -17,9 +17,10 @@ include 'key_secret.php';
 
 $huobi=new HuobiSpot($key,$secret);
 
+//If you are developing locally and need an agent, you can set this
 $huobi->setProxy();
-
-$huobi->setTimeOut(10);
+//Set the request timeout to 60 seconds by default
+$huobi->setTimeOut(5);
 
 //Place an Order
 try {
@@ -56,6 +57,46 @@ try {
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
 }
+
+//***********************Customize the order ID
+//Place an Order
+try {
+    $client_order_id=rand(10000,99999).rand(10000,99999);
+    $result=$huobi->order()->postPlace([
+        'account-id'=>$account_id,
+        'symbol'=>'btcusdt',
+        'type'=>'buy-limit',
+        'amount'=>'0.001',
+        'price'=>'1000',
+        'client-order-id'=>$client_order_id,
+    ]);
+    print_r($result);
+}catch (\Exception $e){
+    print_r(json_decode($e->getMessage(),true));
+}
+sleep(1);
+
+//Get order details by order ID.
+try {
+    $result=$huobi->order()->getClientOrder([
+        'clientOrderId'=>$client_order_id,
+    ]);
+    print_r($result);
+}catch (\Exception $e){
+    print_r(json_decode($e->getMessage(),true));
+}
+sleep(1);
+
+//Cancelling an unfilled order.
+try {
+    $result=$huobi->order()->postSubmitCancelClientOrder([
+        'client-order-id'=>$client_order_id,
+    ]);
+    print_r($result);
+}catch (\Exception $e){
+    print_r(json_decode($e->getMessage(),true));
+}
+
 
 
 
