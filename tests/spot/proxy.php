@@ -17,14 +17,23 @@ include 'key_secret.php';
 
 $huobi=new HuobiSpot($key,$secret);
 
-//If you are developing locally and need an agent, you can set this
-$huobi->setProxy();
-
-//More flexible Settings
-$huobi->setProxy([
-    'http'  => 'http://127.0.0.1:12333',
-    'https' => 'http://127.0.0.1:12333',
+//You can set special needs
+$huobi->setOptions([
+    //Set the request timeout to 60 seconds by default
+    'timeout'=>10,
+    
+    //If you are developing locally and need an agent, you can set this
+    'proxy'=>true,
+    //More flexible Settings
+    /* 'proxy'=>[
+     'http'  => 'http://127.0.0.1:12333',
+     'https' => 'http://127.0.0.1:12333',
+     'no'    =>  ['.cn']
+     ], */
+    //Close the certificate
+    //'verify'=>false,
 ]);
+
 
 //get the status of an account
 try {

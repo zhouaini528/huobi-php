@@ -32,9 +32,7 @@ class Request
     
     protected $data=[];
     
-    protected $timeout=60;
-    
-    protected $proxy=false;
+    protected $options=[];
     
     public function __construct(array $data)
     {
@@ -42,7 +40,7 @@ class Request
         $this->secret=$data['secret'] ?? '';
         $this->host=$data['host'] ?? 'https://api.huobi.pro';
         
-        $this->timeout=$data['timeout'] ?? 60;
+        $this->options=$data['options'] ?? [];
     }
     
     /**
@@ -54,6 +52,8 @@ class Request
         $this->signature();
         
         $this->headers();
+        
+        $this->options();
     }
     
     /**
@@ -115,14 +115,23 @@ class Request
     }
     
     /**
-     * 代理端口设置
-     * @param bool|array
-     * false   默认
-     * true   设置本地代理
-     * array  手动设置代理
+     * 请求设置
      * */
-    function proxy($proxy=false){
-        $this->proxy=$proxy;
+    protected function options(){
+        $this->options=array_merge([
+            'headers'=>$this->headers,
+            //'verify'=>false   //关闭证书认证
+        ],$this->options);
+        
+        $this->options['timeout'] = $this->options['timeout'] ?? 60;
+        
+        if(isset($this->options['proxy']) && $this->options['proxy']===true) {
+            $this->options['proxy']=[
+                'http'  => 'http://127.0.0.1:12333',
+                'https' => 'http://127.0.0.1:12333',
+                'no'    =>  ['.cn']
+            ];
+        }
     }
     
     /**
@@ -131,27 +140,11 @@ class Request
     protected function send(){
         $client = new \GuzzleHttp\Client();
         
-        $data=[
-            'headers'=>$this->headers,
-            'timeout'=>$this->timeout
-        ];
-        
-        //是否有代理设置
-        if(is_array($this->proxy)){
-            $data=array_merge($data,['proxy'=>$this->proxy]);
-        }else{
-            if($this->proxy) $data['proxy']=[
-                'http'  => 'http://127.0.0.1:12333',
-                'https' => 'http://127.0.0.1:12333',
-                'no'    =>  ['.cn']
-            ];
-        }
-        
         if(!empty($this->data)) {
-            $data['body']=json_encode($this->data);
+            $this->options['body']=json_encode($this->data);
         }
         
-        $response = $client->request($this->type, $this->host.$this->path.'?'.$this->signature, $data);
+        $response = $client->request($this->type, $this->host.$this->path.'?'.$this->signature, $this->options);
         
         return $response->getBody()->getContents();
     }

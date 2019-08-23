@@ -16,8 +16,7 @@ class HuobiFuture
     protected $secret;
     protected $host;
     
-    protected $proxy=false;
-    protected $timeout=60;
+    protected $options=[];
     
     function __construct(string $key='',string $secret='',string $host='https://api.hbdm.com'){
         $this->key=$key;
@@ -33,50 +32,29 @@ class HuobiFuture
             'key'=>$this->key,
             'secret'=>$this->secret,
             'host'=>$this->host,
-            'timeout'=>$this->timeout,
+            'options'=>$this->options,
         ];
     }
     
     /**
-     * Local development sets the proxy
-     * @param bool|array
-     * $proxy=false Default
-     * $proxy=true  Local proxy http://127.0.0.1:12333
-     *
-     * Manual proxy
-     * $proxy=[
-     'http'  => 'http://127.0.0.1:12333',
-     'https' => 'http://127.0.0.1:12333',
-     'no'    =>  ['.cn']
-     * ]
+     * 
      * */
-    function setProxy($proxy=true){
-        $this->proxy=$proxy;
-    }
-    
-    /**
-     * Set the request timeout to 60 seconds by default
-     * */
-    function setTimeOut($timeout=60){
-        $this->timeout=$timeout;
+    function setOptions(array $options=[]){
+        $this->options=$options;
     }
     
     /**
      * 
      * */
     public function contract(){
-        $contract= new Contract($this->init());
-        $contract->proxy($this->proxy);
-        return $contract;
+        return new Contract($this->init());
     }
     
     /**
      *
      * */
     public function market(){
-        $market= new Market($this->init());
-        $market->proxy($this->proxy);
-        return $market;
+        return  new Market($this->init());
     }
     
 }

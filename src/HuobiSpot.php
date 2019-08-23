@@ -22,8 +22,7 @@ class HuobiSpot
     protected $secret;
     protected $host;
     
-    protected $proxy=false;
-    protected $timeout=60;
+    protected $options=[];
     
     function __construct(string $key='',string $secret='',string $host='https://api.huobi.pro'){
         $this->key=$key;
@@ -39,121 +38,84 @@ class HuobiSpot
             'key'=>$this->key,
             'secret'=>$this->secret,
             'host'=>$this->host,
-            'timeout'=>$this->timeout,
+            'options'=>$this->options,
         ];
     }
     
     /**
-     * Local development sets the proxy
-     * @param bool|array
-     * $proxy=false Default
-     * $proxy=true  Local proxy http://127.0.0.1:12333
-     *
-     * Manual proxy
-     * $proxy=[
-     'http'  => 'http://127.0.0.1:12333',
-     'https' => 'http://127.0.0.1:12333',
-     'no'    =>  ['.cn']
-     * ]
+     * 
      * */
-    function setProxy($proxy=true){
-        $this->proxy=$proxy;
-    }
-    
-    /**
-     * Set the request timeout to 60 seconds by default
-     * */
-    function setTimeOut($timeout=60){
-        $this->timeout=$timeout;
+    function setOptions(array $options=[]){
+        $this->options=$options;
     }
     
     /**
      * 
      * */
     public function account(){
-        $account= new Account($this->init());
-        $account->proxy($this->proxy);
-        return $account;
+        return  new Account($this->init());
     }
     
     /**
      *
      * */
     public function common(){
-        $common= new Common($this->init());
-        $common->proxy($this->proxy);
-        return $common;
+        return  new Common($this->init());
     }
     
     /**
      *
      * */
     public function dw(){
-        $dw= new Dw($this->init());
-        $dw->proxy($this->proxy);
-        return $dw;
+        return  new Dw($this->init());
     }
     
     /**
      *
      * */
     public function etf(){
-        $etf= new Etf($this->init());
-        $etf->proxy($this->proxy);
-        return $etf;
+        return  new Etf($this->init());
     }
     
     /**
      *
      * */
     public function margin(){
-        $margin= new Margin($this->init());
-        $margin->proxy($this->proxy);
-        return $margin;
+        return  new Margin($this->init());
     }
     
     /**
      *
      * */
     public function market(){
-        $market= new Market($this->init());
-        $market->proxy($this->proxy);
-        return $market;
+        return  new Market($this->init());
     }
     
     /**
      *
      * */
     public function order(){
-        $order= new Order($this->init());
-        $order->proxy($this->proxy);
-        return $order;
+        return  new Order($this->init());
     }
     
     /**
      *
      * */
     public function subuser(){
-        $subuser= new Subuser($this->init());
-        $subuser->proxy($this->proxy);
-        return $subuser;
+        return  new Subuser($this->init());
     }
     
     /**
      *
      * */
     public function futures(){
-        $futures = new Futures($this->init());
-        $futures->proxy($this->proxy);
-        return $futures;
+        return  new Futures($this->init());
     }
     
     /**
      *
      * */
     public function fee(){
-        $fee = new Fee($this->init());
-        $fee->proxy($this->proxy);
-        return $fee;
+        return  new Fee($this->init());
     }
 }

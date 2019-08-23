@@ -16,18 +16,31 @@ require __DIR__ .'../../../vendor/autoload.php';
 include 'key_secret.php';
 
 $huobi=new HuobiFuture($key,$secret);
-//$huobi->setProxy();
 
-//Set the request timeout to 60 seconds by default
-$huobi->setTimeOut(11);
+//You can set special needs
+$huobi->setOptions([
+    //Set the request timeout to 60 seconds by default
+    'timeout'=>10,
+    
+    //If you are developing locally and need an agent, you can set this
+    'proxy'=>true,
+    //More flexible Settings
+    /* 'proxy'=>[
+     'http'  => 'http://127.0.0.1:12333',
+     'https' => 'http://127.0.0.1:12333',
+     'no'    =>  ['.cn']
+     ], */
+    //Close the certificate
+    //'verify'=>false,
+]);
 
 //Place an Order
 try {
     $result=$huobi->contract()->postOrder([
-        'symbol'=>'XRP',//string	false	"BTC","ETH"...
+        'symbol'=>'BTC',//string	false	"BTC","ETH"...
         'contract_type'=>'quarter',//	string	false	Contract Type ("this_week": "next_week": "quarter":)
-        'contract_code'=>'XRP190927',//	string	false	BTC180914
-        'price'=>'0.3',//	decimal	true	Price
+        'contract_code'=>'BTC190927',//	string	false	BTC180914
+        'price'=>'2000',//	decimal	true	Price
         'volume'=>'1',//	long	true	Numbers of orders (amount)
         'direction'=>'buy',//	string	true	Transaction direction
         'offset'=>'open',//	string	true	"open", "close"
@@ -46,7 +59,7 @@ try {
     $result=$huobi->contract()->postOrderInfo([
         'order_id'=>$result['data']['order_id'],//You can also 'xxxx,xxxx,xxxx' multiple ID
         //'client_order_id'=>'xxxx',
-        'symbol'=>'XRP'
+        'symbol'=>'BTC'
     ]);
     print_r($result);
 }catch (\Exception $e){
@@ -58,13 +71,13 @@ try {
     $result=$huobi->contract()->postCancel([
         'order_id'=>$result['data'][0]['order_id'],//You can also 'xxxx,xxxx,xxxx' multiple ID
         //'client_order_id'=>'xxxx',
-        'symbol'=>'XRP'
+        'symbol'=>'BTC'
     ]);
     print_r($result);
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
 }
-
+die;
 //User`s position Information
 try {
     $result=$huobi->contract()->postPositionInfo();
