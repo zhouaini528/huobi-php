@@ -10,6 +10,8 @@ Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huo
 
 ### 其他交易所API
 
+[Exchanges](https://github.com/zhouaini528/exchanges-php) 它包含以下所有交易所，强烈推荐使用该SDK。
+
 [Bitmex](https://github.com/zhouaini528/bitmex-php)
 
 [Okex](https://github.com/zhouaini528/okex-php)
@@ -17,10 +19,6 @@ Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huo
 [Huobi](https://github.com/zhouaini528/huobi-php)
 
 [Binance](https://github.com/zhouaini528/binance-php)
-
-[Exchanges](https://github.com/zhouaini528/exchanges-php) 是以上所有交易所集合成的SDK
-
-[Exchanges Tools](https://github.com/dytf/exchanges-tools) 模拟数据测试工具
 
 #### 安装方式
 ```
