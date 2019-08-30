@@ -27,7 +27,7 @@ Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huo
 composer require "linwj/huobi dev-master"
 ```
 
-支持本地开发代理设置 [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/proxy.php#L21)
+支持更多的请求设置 [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/proxy.php#L21)
 ```php
 $huobi=new HuobiSpot();
 
