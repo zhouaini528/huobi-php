@@ -20,6 +20,8 @@ Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huo
 
 [Binance](https://github.com/zhouaini528/binance-php)
 
+[Kucoin](https://github.com/zhouaini528/kucoin-php)
+
 #### 安装方式
 ```
 composer require "linwj/huobi dev-master"
