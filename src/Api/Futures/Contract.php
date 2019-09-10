@@ -25,33 +25,86 @@ class Contract extends Request
         return $this->exec();
     }
     
-    public function getIndex(array $data){
+    /**
+     * GET api/v1/contract_index
+     * */
+    public function getIndex(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/api/v1/contract_index';
         $this->data=$data;
         return $this->exec();
     }
     
-    public function getPriceLimit(array $data){
+    /**
+     * GET api/v1/contract_price_limit
+     * */
+    public function getPriceLimit(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/api/v1/contract_price_limit';
         $this->data=$data;
         return $this->exec();
     }
     
-    public function getOpenInterest(array $data){
+    /**
+     * GET api/v1/contract_open_interest
+     * */
+    public function getOpenInterest(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/api/v1/contract_open_interest';
         $this->data=$data;
         return $this->exec();
     }
     
-    public function getDeliveryPrice(array $data){
+    /**
+     *GET api/v1/contract_delivery_price
+     * */
+    public function getDeliveryPrice(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/api/v1/contract_delivery_price';
         $this->data=$data;
         return $this->exec();
     }
+    
+    /**
+     *GET api/v1/contract_risk_info
+     * */
+    public function getRiskInfo(array $data=[]){
+        $this->type='GET';
+        $this->path='/api/v1/contract_risk_info';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *GET `api/v1/contract_insurance_fund
+     * */
+    public function getInsuranceFund(array $data=[]){
+        $this->type='GET';
+        $this->path='/api/v1/contract_insurance_fund';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *GET api/v1/contract_adjustfactor
+     * */
+    public function getAdjustfactor(array $data=[]){
+        $this->type='GET';
+        $this->path='/api/v1/contract_adjustfactor';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *GET api/v1/contract_his_open_interest
+     * */
+    public function getHisOpenInterest(array $data=[]){
+        $this->type='GET';
+        $this->path='/api/v1/contract_his_open_interest';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
     
     /**
      * 获取用户账户信息
@@ -89,7 +142,7 @@ class Contract extends Request
         lever_rate	int	true	杠杆倍数[“开仓”若有10倍多单，就不能再下20倍多单]
         order_price_type	string	true	订单报价类型 "limit":限价 "opponent":对手价
      * */
-    public function postOrder(array $data){
+    public function postOrder(array $data=[]){
         $this->type='POST';
         $this->path='/api/v1/contract_order';
         
@@ -103,7 +156,7 @@ class Contract extends Request
     /**
      * 
      * */
-    public function postBatchOrder(array $data){
+    public function postBatchOrder(array $data=[]){
         $this->type='POST';
         $this->path='/api/v1/contract_batchorder';
         $this->data=$data;
@@ -119,7 +172,7 @@ class Contract extends Request
         client_order_id	false	string	客户订单ID(多个订单ID中间以","分隔,一次最多允许撤消50个订单)
         symbol	true	string	"BTC","ETH"...
      * */
-    public function postCancel(array $data){
+    public function postCancel(array $data=[]){
         $this->type='POST';
         $this->path='/api/v1/contract_cancel';
         $this->data=$data;
@@ -129,7 +182,7 @@ class Contract extends Request
     /**
      * symbol	true	string	品种代码，如"BTC","ETH"...
      * */
-    public function postCancelAll(array $data){
+    public function postCancelAll(array $data=[]){
         $this->type='POST';
         $this->path='/api/v1/contract_cancelall';
         $this->data=$data;
@@ -142,30 +195,49 @@ class Contract extends Request
         client_order_id	false	string	客户订单ID(多个订单ID中间以","分隔,一次最多允许查询20个订单)
         symbol	true	string	"BTC","ETH"...
      * */
-    public function postOrderInfo(array $data){
+    public function postOrderInfo(array $data=[]){
         $this->type='POST';
         $this->path='/api/v1/contract_order_info';
         $this->data=$data;
         return $this->exec();
     }
     
-    public function postOrderDetail(array $data){
-        $this->type='GET';
-        $this->path='';
+    /**
+     *POST api/v1/contract_order_detail
+     * */
+    public function postOrderDetail(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_order_detail';
         $this->data=$data;
         return $this->exec();
     }
     
-    public function postOpenOrders(array $data){
-        $this->type='GET';
-        $this->path='';
+    /**
+     * POST api/v1/contract_openorders 
+     * */
+    public function postOpenOrders(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_openorders';
         $this->data=$data;
         return $this->exec();
     }
     
-    public function postHisorders(array $data){
-        $this->type='GET';
-        $this->path='';
+    /**
+     *POST api/v1/contract_hisorders
+     * */
+    public function postHisorders(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_hisorders';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *POST api/v1/contract_matchresults
+     * */
+    public function postMatchresults(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_matchresults';
         $this->data=$data;
         return $this->exec();
     }

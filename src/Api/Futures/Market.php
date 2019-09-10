@@ -18,7 +18,7 @@ class Market extends Request
         step0时，不合并深度, (20档数据) step6, step7, step8, step9, step10, step11（合并深度7-11）；
         step6时，不合并深度
      * */
-    public function getDepth(array $data){
+    public function getDepth(array $data=[]){
         $this->type='GET';
         $this->path='/market/depth';
         
@@ -28,16 +28,22 @@ class Market extends Request
         return $this->exec();
     }
     
-    public function getHistoryKline(array $data){
+    /**
+     * GET /market/history/kline
+     * */
+    public function getHistoryKline(array $data=[]){
         $this->type='GET';
         $this->path='/market/history/kline';
         $this->data=$data;
         return $this->exec();
     }
     
-    public function getDetailMerged(array $data){
+    /**
+     * GET /market/detail/merged
+     * */
+    public function getDetailMerged(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/market/detail/merged';
         $this->data=$data;
         return $this->exec();
     }
@@ -46,7 +52,7 @@ class Market extends Request
      * 获取市场最近成交记录
      * symbol	true	string	合约名称	如"BTC_CW"表示BTC当周合约，"BTC_NW"表示BTC次周合约，"BTC_CQ"表示BTC季度合约
      * */
-    public function getTrade(array $data){
+    public function getTrade(array $data=[]){
         $this->type='GET';
         $this->path='/market/trade';
         $this->data=$data;
@@ -58,7 +64,7 @@ class Market extends Request
      * symbol	true	string	合约名称		如"BTC_CW"表示BTC当周合约，"BTC_NW"表示BTC次周合约，"BTC_CQ"表示BTC季度合约
         size	false	number	获取交易记录的数量	1	[1, 2000]
      * */
-    public function getHistoryTrade(array $data){
+    public function getHistoryTrade(array $data=[]){
         $this->type='GET';
         $this->path='/market/history/trade';
         
