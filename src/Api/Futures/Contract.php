@@ -194,6 +194,8 @@ class Contract extends Request
      * order_id	 false	string	订单ID（ 多个订单ID中间以","分隔,一次最多允许查询20个订单 ）
         client_order_id	false	string	客户订单ID(多个订单ID中间以","分隔,一次最多允许查询20个订单)
         symbol	true	string	"BTC","ETH"...
+        
+        order_id 与  client_order_id  必须至少存在一个
      * */
     public function postOrderInfo(array $data=[]){
         $this->type='POST';
