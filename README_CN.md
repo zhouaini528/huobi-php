@@ -24,7 +24,7 @@ Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huo
 
 #### 安装方式
 ```
-composer require "linwj/huobi dev-master"
+composer require linwj/huobi
 ```
 
 支持更多的请求设置 [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/proxy.php#L21)

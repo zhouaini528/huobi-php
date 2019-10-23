@@ -24,7 +24,7 @@ Many interfaces are not yet complete, and users can continue to extend them base
 
 #### Installation
 ```
-composer require "linwj/huobi dev-master"
+composer require linwj/huobi
 ```
 
 Support for more request Settings [More](https://github.com/zhouaini528/huobi-php/blob/master/tests/spot/proxy.php#L21)
