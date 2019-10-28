@@ -9,6 +9,7 @@ namespace Lin\Huobi;
 
 use Lin\Huobi\Api\Futures\Contract;
 use Lin\Huobi\Api\Futures\Market;
+use Lin\Huobi\Api\Futures\Lightning;
 
 class HuobiFuture
 {
@@ -57,4 +58,10 @@ class HuobiFuture
         return  new Market($this->init());
     }
     
+    /**
+     *
+     * */
+    public function lightning(){
+        return  new Lightning($this->init());
+    }
 }
