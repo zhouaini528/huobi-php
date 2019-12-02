@@ -4,9 +4,9 @@ Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huo
 
 所有接口方法的初始化都与huobi提供的方法相同。更多细节 [src/api](https://github.com/zhouaini528/huobi-php/tree/master/src/Api)
 
-很多接口还未完善，使用者可以根据我的设计方案继续扩展，欢迎与我一起迭代它。
+大部分的接口已经完成，使用者可以根据我的设计方案继续扩展，欢迎与我一起迭代它。
 
-[English document](https://github.com/zhouaini528/huobi-php/blob/master/README.md)
+[English Document](https://github.com/zhouaini528/huobi-php/blob/master/README.md)
 
 ### 其他交易所API
 
