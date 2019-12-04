@@ -107,6 +107,47 @@ class Contract extends Request
     
     
     /**
+     *GET api/v1/contract_elite_account_ratio
+     * */
+    public function getEliteAccountRatio(array $data=[]){
+        $this->type='GET';
+        $this->path='/api/v1/contract_elite_account_ratio';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *GET api/v1/contract_elite_position_ratio
+     * */
+    public function getElitePositionRatio(array $data=[]){
+        $this->type='GET';
+        $this->path='/api/v1/contract_elite_position_ratio';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *GET api/v1/contract_liquidation_orders
+     * */
+    public function getLiquidationOrders(array $data=[]){
+        $this->type='GET';
+        $this->path='/api/v1/contract_liquidation_orders';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *
+     * */
+    /* public function get(array $data=[]){
+        $this->type='GET';
+        $this->path='';
+        $this->data=$data;
+        return $this->exec();
+    } */
+    
+    
+    /**
      * 获取用户账户信息
      * symbol	false	string	品种代码		"BTC","ETH"...如果缺省，默认返回所有品种
      * */
@@ -124,6 +165,96 @@ class Contract extends Request
     public function postPositionInfo(array $data=[]){
         $this->type='POST';
         $this->path='/api/v1/contract_position_info';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     * POST api/v1/contract_sub_account_list
+     * */
+    public function postSubAccountList(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_sub_account_list';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *POST api/v1/contract_sub_account_info
+     * */
+    public function postSubAccountInfo(array $data=[]){
+        $this->type='POST';
+        $this->path='api/v1/contract_sub_account_info';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *POST api/v1/contract_sub_position_info
+     * */
+    public function postSubPositionInfo(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_sub_position_info';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *POST api/v1/contract_financial_record
+     * */
+    public function postFinancialRecord(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_financial_record';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *POST api/v1/contract_order_limit
+     * */
+    public function postOrderLimit(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_order_limit';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *POST api/v1/contract_fee
+     * */
+    public function postFee(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_fee';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *POST api/v1/contract_transfer_limit
+     * */
+    public function postTransferLimit(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_transfer_limit';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *post api/v1/contract_position_limit
+     * */
+    public function postPositionLimit(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_position_limit';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *post api/v1/contract_account_position_info
+     * */
+    public function postAccountPositionInfo(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_account_position_info';
         $this->data=$data;
         return $this->exec();
     }
@@ -243,4 +374,64 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
+    
+    /**
+     * POST api/v1/contract_trigger_order
+     * */
+    public function postTriggerOrder(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_trigger_order';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *POST api/v1/contract_trigger_cancel
+     * */
+    public function postTriggerCancel(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_trigger_cancel';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *POST api/v1/contract_trigger_cancelall
+     * */
+    public function postTriggerCancelall(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_trigger_cancelall';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *POST api/v1/contract_trigger_openorders
+     * */
+    public function postTriggerOpenorders(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_trigger_openorders';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *POST api/v1/contract_trigger_hisorders
+     * */
+    public function postTriggerHisorders(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/contract_trigger_hisorders';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *
+     * */
+    /* public function post(array $data=[]){
+        $this->type='POST';
+        $this->path='';
+        $this->data=$data;
+        return $this->exec();
+    } */
 }
