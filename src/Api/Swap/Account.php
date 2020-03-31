@@ -128,6 +128,8 @@ class Account extends Request
         $this->type='POST';
         $this->path='/swap-api/v1/swap_order';
         
+        $data['lever_rate']=$data['lever_rate'] ?? 20;
+        
         $this->data=$data;
         return $this->exec();
     }
@@ -168,7 +170,7 @@ class Account extends Request
     /**
      *交易	账户接口	swap-api/v1/swap_order_info	POST	获取合约订单信息	是
      * */
-    public function posOrderInfo(array $data=[]){
+    public function postOrderInfo(array $data=[]){
         $this->type='POST';
         $this->path='/swap-api/v1/swap_order_info';
         

@@ -7,9 +7,8 @@ namespace Lin\Huobi;
 
 
 
-use Lin\Huobi\Api\Swap\Contract;
 use Lin\Huobi\Api\Swap\Market;
-use Lin\Huobi\Api\Swap\Lightning;
+use Lin\Huobi\Api\Swap\Account;
 
 class HuobiSwap
 {
@@ -47,8 +46,8 @@ class HuobiSwap
     /**
      * 
      * */
-    public function contract(){
-        return new Contract($this->init());
+    public function account(){
+        return new Account($this->init());
     }
     
     /**
@@ -56,12 +55,5 @@ class HuobiSwap
      * */
     public function market(){
         return  new Market($this->init());
-    }
-    
-    /**
-     *
-     * */
-    public function lightning(){
-        return  new Lightning($this->init());
     }
 }
