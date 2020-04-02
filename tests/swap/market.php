@@ -23,7 +23,7 @@ $huobi->setOptions([
     'timeout'=>10,
     
     //If you are developing locally and need an agent, you can set this
-    'proxy'=>true,
+    //'proxy'=>true,
     //More flexible Settings
     /* 'proxy'=>[
      'http'  => 'http://127.0.0.1:12333',
@@ -37,7 +37,7 @@ $huobi->setOptions([
 //The Last Trade of a Contract
 try {
     $result=$huobi->market()->getTrade([
-        'symbol'=>'XRP_CQ'
+        'symbol'=>'BTC-USD'
     ]);
     print_r($result);
 }catch (\Exception $e){
@@ -47,7 +47,7 @@ try {
 //Request a Batch of Trade Records of a Contract
 try {
     $result=$huobi->market()->getHistoryTrade([
-        'symbol'=>'XRP_CQ',
+        'symbol'=>'BTC-USD',
         //'size'=>100
     ]);
     print_r($result);
@@ -58,7 +58,7 @@ try {
 //Get Market Depth
 try {
     $result=$huobi->market()->getDepth([
-        'symbol'=>'XRP_CQ',
+        'symbol'=>'BTC-USD',
         'type'=>'step1'
     ]);
     print_r($result);
