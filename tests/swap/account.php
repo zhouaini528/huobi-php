@@ -37,8 +37,8 @@ $huobi->setOptions([
 //Place an Order
 try {
     $result=$huobi->account()->postOrder([
-        'contract_code'=>'BTC-USD',//	string	false	BTC180914
-        'price'=>'2000',//	decimal	true	Price
+        'contract_code'=>'ETH-USD',//	string	false	BTC180914
+        'price'=>'100',//	decimal	true	Price
         'volume'=>'1',//	long	true	Numbers of orders (amount)
         'direction'=>'buy',//	string	true	Transaction direction
         'offset'=>'open',//	string	true	"open", "close"
@@ -51,31 +51,35 @@ try {
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
 }
+sleep(1);
 
 //Get Information of an Order
 try {
     $result=$huobi->account()->postOrderInfo([
-        'order_id'=>$result['data']['order_id'],//You can also 'xxxx,xxxx,xxxx' multiple ID
+        //'order_id'=>$result['data']['order_id'],//You can also 'xxxx,xxxx,xxxx' multiple ID
+        'order_id'=>'697090784754704384',
         //'client_order_id'=>'xxxx',
-        'symbol'=>'BTC'
+        'contract_code'=>'ETH-USD'
     ]);
     print_r($result);
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
 }
+sleep(1);
 
 //Cancel an Order
 try {
     $result=$huobi->account()->postCancel([
         'order_id'=>$result['data'][0]['order_id'],//You can also 'xxxx,xxxx,xxxx' multiple ID
         //'client_order_id'=>'xxxx',
-        'symbol'=>'BTC'
+        'contract_code'=>'ETH-USD'
     ]);
     print_r($result);
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
 }
-die;
+sleep(1);
+
 //User`s position Information
 try {
     $result=$huobi->account()->postPositionInfo();
@@ -84,10 +88,3 @@ try {
     print_r(json_decode($e->getMessage(),true));
 }
 
-//User`s Account Information
-try {
-    $result=$huobi->account()->postAccountInfo();
-    print_r($result);
-}catch (\Exception $e){
-    print_r(json_decode($e->getMessage(),true));
-}
