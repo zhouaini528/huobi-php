@@ -56,8 +56,7 @@ sleep(1);
 //Get Information of an Order
 try {
     $result=$huobi->account()->postOrderInfo([
-        //'order_id'=>$result['data']['order_id'],//You can also 'xxxx,xxxx,xxxx' multiple ID
-        'order_id'=>'697090784754704384',
+        'order_id'=>$result['data']['order_id'],//You can also 'xxxx,xxxx,xxxx' multiple ID
         //'client_order_id'=>'xxxx',
         'contract_code'=>'ETH-USD'
     ]);
