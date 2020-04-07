@@ -9,13 +9,13 @@
  * Most of them are unfinished and need your help
  * https://github.com/zhouaini528/okex-php.git
  * */
-use Lin\Huobi\HuobiFuture;
+use Lin\Huobi\HuobiSwap;
 
 require __DIR__ .'../../../vendor/autoload.php';
 
 include 'key_secret.php';
 
-$huobi=new HuobiFuture();
+$huobi=new HuobiSwap();
 
 //You can set special needs
 $huobi->setOptions([
@@ -37,7 +37,7 @@ $huobi->setOptions([
 //The Last Trade of a Contract
 try {
     $result=$huobi->market()->getTrade([
-        'symbol'=>'BTC-USD'
+        'contract_code'=>'ETH-USD'
     ]);
     print_r($result);
 }catch (\Exception $e){
@@ -46,9 +46,10 @@ try {
 
 //Request a Batch of Trade Records of a Contract
 try {
-    $result=$huobi->market()->getHistoryTrade([
-        'symbol'=>'BTC-USD',
-        //'size'=>100
+    $result=$huobi->market()->getHistorykline([
+        'contract_code'=>'ETH-USD',
+        'period'=>'1min',
+        'size'=>10
     ]);
     print_r($result);
 }catch (\Exception $e){
@@ -58,7 +59,7 @@ try {
 //Get Market Depth
 try {
     $result=$huobi->market()->getDepth([
-        'symbol'=>'BTC-USD',
+        'contract_code'=>'ETH-USD',
         'type'=>'step1'
     ]);
     print_r($result);

@@ -59,7 +59,7 @@ class Market extends Request
     /**
      *读取	市场行情接口	swap-ex/market/depth	GET	获取行情深度数据	否
      * */
-    public function getDepath(array $data=[]){
+    public function getDepth(array $data=[]){
         $this->type='GET';
         $this->path='/swap-ex/market/depth';
         
