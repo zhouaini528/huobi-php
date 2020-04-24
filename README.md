@@ -304,3 +304,56 @@ try {
 [More use cases](https://github.com/zhouaini528/huobi-php/tree/master/tests/future)
 
 [More API](https://github.com/zhouaini528/huobi-php/tree/master/src/Api/Futures)
+
+### Coin Margined Swap API 
+
+```php
+$huobi=new HuobiSwap($key,$secret);
+
+//Place an Order
+try {
+    $result=$huobi->account()->postOrder([
+        'contract_code'=>'ETH-USD',//   string  false   BTC180914
+        'price'=>'100',//   decimal true    Price
+        'volume'=>'1',//    long    true    Numbers of orders (amount)
+        'direction'=>'buy',//   string  true    Transaction direction
+        'offset'=>'open',// string  true    "open", "close"
+        'order_price_type'=>'limit',//"limit", "opponent"
+        'lever_rate'=>20,//int  true    Leverage rate [if“Open”is multiple orders in 10 rate, there will be not multiple orders in 20 rate
+        
+        //'client_order_id'=>'',//long  false   Clients fill and maintain themselves, and this time must be greater than last time
+    ]);
+    print_r($result);
+}catch (\Exception $e){
+    print_r(json_decode($e->getMessage(),true));
+}
+
+//Get Information of an Order
+try {
+    $result=$huobi->account()->postOrderInfo([
+        'order_id'=>$result['data']['order_id'],//You can also 'xxxx,xxxx,xxxx' multiple ID
+        //'client_order_id'=>'xxxx',
+        'contract_code'=>'ETH-USD'
+    ]);
+    print_r($result);
+}catch (\Exception $e){
+    print_r(json_decode($e->getMessage(),true));
+}
+
+//Cancel an Order
+try {
+    $result=$huobi->account()->postCancel([
+        'order_id'=>$result['data'][0]['order_id'],//You can also 'xxxx,xxxx,xxxx' multiple ID
+        //'client_order_id'=>'xxxx',
+        'contract_code'=>'ETH-USD'
+    ]);
+    print_r($result);
+}catch (\Exception $e){
+    print_r(json_decode($e->getMessage(),true));
+}
+```
+
+[更多用例](https://github.com/zhouaini528/huobi-php/tree/master/tests/swap)
+
+[更多API](https://github.com/zhouaini528/huobi-php/tree/master/src/Api/Swap)
+
