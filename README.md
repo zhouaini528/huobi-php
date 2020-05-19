@@ -22,6 +22,14 @@ Most of the interface is now complete, and the user can continue to extend it ba
 
 [Kucoin](https://github.com/zhouaini528/kucoin-php)
 
+[Mxc](https://github.com/zhouaini528/Mxc-php) Temporarily not connected to Exchanges SDK
+
+[Coinbase](https://github.com/zhouaini528/coinbase-php) Temporarily not connected to Exchanges SDK
+
+[ZB](https://github.com/zhouaini528/zb-php) Temporarily not connected to Exchanges SDK
+
+[Bitfinex](https://github.com/zhouaini528/bitfinex-php) Temporarily not connected to Exchanges SDK
+
 #### Installation
 ```
 composer require linwj/huobi
