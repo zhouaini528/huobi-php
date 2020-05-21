@@ -20,15 +20,15 @@ Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huo
 
 [Binance](https://github.com/zhouaini528/binance-php)
 
-[Kucoin](https://github.com/zhouaini528/kucoin-php)
+[Kucoin](https://github.com/zhouaini528/Kucoin-php)
 
-[Mxc](https://github.com/zhouaini528/mxc-php) 暂时未加入 Exchanges SDK
+[Mxc](https://github.com/zhouaini528/mxc-php)
 
-[Coinbase](https://github.com/zhouaini528/coinbase-php) 暂时未加入 Exchanges SDK
+[Coinbase](https://github.com/zhouaini528/coinbase-php)
 
-[ZB](https://github.com/zhouaini528/zb-php) 暂时未加入 Exchanges SDK
+[ZB](https://github.com/zhouaini528/zb-php)
 
-[Bitfinex](https://github.com/zhouaini528/zb-php) 暂时未加入 Exchanges SDK
+[Bitfinex](https://github.com/zhouaini528/zb-php)
 
 #### 安装方式
 ```
