@@ -12,9 +12,9 @@ use Lin\Huobi\Request;
 class Order extends Request
 {
     /**
-     *
+     *POST /v1/order/orders/place
      * */
-    public function postPlace(array $data){
+    public function postPlace(array $data=[]){
         $this->type='POST';
         $this->path='/v1/order/orders/place';
         $this->data=$data;
@@ -22,9 +22,19 @@ class Order extends Request
     }
     
     /**
-     * 交易	POST/v1/order/orders/{order-id}/submitcancel	POST	按order-id撤销一个订单	Y	Y
+     *POST /v1/order/batch-orders
      * */
-    public function postSubmitCancel(array $data){
+    public function postBatchOrders(array $data=[]){
+        $this->type='POST';
+        $this->path='/v1/order/batch-orders';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     * POST /v1/order/orders/{order-id}/submitcancel
+     * */
+    public function postSubmitCancel(array $data=[]){
         $this->type='POST';
         $this->path='/v1/order/orders/'.$data['order-id'].'/submitcancel';
         $this->data=$data;
@@ -32,12 +42,9 @@ class Order extends Request
     }
     
     /**
-     * 撤销订单（基于client order ID）	POST /v1/order/orders/submitCancelClientOrder
-     * 
-     * 参数名称	是否必须	类型	描述	默认值	取值范围
-        client-order-id	true	string	用户自编订单号	
+     * POST /v1/order/orders/submitCancelClientOrder
      * */
-    public function postSubmitCancelClientOrder(array $data){
+    public function postSubmitCancelClientOrder(array $data=[]){
         $this->type='POST';
         $this->path='/v1/order/orders/submitCancelClientOrder';
         $this->data=$data;
@@ -45,29 +52,39 @@ class Order extends Request
     }
     
     /**
-     *
+     *GET /v1/order/openOrders 
      * */
-    public function postBatchCancel(array $data){
+    public function getOpenOrders(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/v1/order/openOrders';
         $this->data=$data;
         return $this->exec();
     }
     
     /**
-     *
+     *POST /v1/order/orders/batchCancelOpenOrders
      * */
-    public function postBatchCancelOpenOrders(array $data){
+    public function postBatchCancelOpenOrders(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/v1/order/orders/batchCancelOpenOrders';
         $this->data=$data;
         return $this->exec();
     }
     
     /**
-     * 用户订单信息	GET /v1/order/orders/{order-id}	GET	根据order-id查询订单详情	Y	Y
+     *POST /v1/order/orders/batchcancel
      * */
-    public function get(array $data){
+    public function postBatchCancel(array $data=[]){
+        $this->type='GET';
+        $this->path='/v1/order/orders/batchcancel';
+        $this->data=$data;
+        return $this->exec();
+    }
+    
+    /**
+     *GET /v1/order/orders/{order-id}
+     * */
+    public function get(array $data=[]){
         $this->type='GET';
         $this->path='/v1/order/orders/'.$data['order-id'];
         $this->data=$data;
@@ -75,12 +92,9 @@ class Order extends Request
     }
     
     /**
-     * 查询订单详情（基于client order ID）	GET /v1/order/orders/getClientOrder
-     * 
-     * 参数名称	是否必须	类型	描述	默认值	取值范围
-        clientOrderId	true	string	用户自编订单号	
+     * GET /v1/order/orders/getClientOrder
      * */
-    public function getClientOrder(array $data){
+    public function getClientOrder(array $data=[]){
         $this->type='GET';
         $this->path='/v1/order/orders/getClientOrder';
         $this->data=$data;
@@ -88,41 +102,41 @@ class Order extends Request
     }
     
     /**
-     * 用户订单信息	GET /v1/order/orders	GET	查询用户当前委托、或历史委托订单 (up to 100)	Y	Y
+     * GET /v1/order/orders/{order-id}/matchresults
      * */
-    public function getAll(array $data){
+    public function getMatchresults(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/v1/order/orders/{order-id}/matchresults';
         $this->data=$data;
         return $this->exec();
     }
     
     /**
-     * 用户订单信息	GET /v1/order/orders/{order-id}/matchresults	GET	根据order-id查询订单的成交明细	Y	Y
+     * GET /v1/order/orders
      * */
-    public function getMatchresults(array $data){
+    public function getOrders(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/v1/order/orders';
         $this->data=$data;
         return $this->exec();
     }
     
     /**
-     * 用户订单信息	GET /v1/order/matchresults	GET	查询用户当前成交、历史成交	Y	Y
+     * GET /v1/order/history
      * */
-    public function getMatchresultsAll(array $data){
+    public function getHistory(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/v1/order/history';
         $this->data=$data;
         return $this->exec();
     }
     
     /**
-     * 
+     * GET /v1/order/matchresults
      * */
-    public function getOpenOrders(array $data){
+    public function getMatchresultsAll(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/v1/order/matchresults';
         $this->data=$data;
         return $this->exec();
     }
