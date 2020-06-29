@@ -12,27 +12,27 @@ use Lin\Huobi\Request;
 class Market extends Request
 {
     /**
-     *
+     *GET /market/history/kline
      * */
-    public function getHistoryKline(array $data){
+    public function getHistoryKline(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/market/history/kline';
         $this->data=$data;
         return $this->exec();
     }
     
     /**
-     *
+     *GET /market/detail/merged
      * */
-    public function getDetailMerged(array $data){
+    public function getDetailMerged(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/market/detail/merged';
         $this->data=$data;
         return $this->exec();
     }
     
     /**
-     *
+     *GET /market/tickers
      * */
     public function getTickers(){
         $this->type='GET';
@@ -41,12 +41,9 @@ class Market extends Request
     }
     
     /**
-     * 获取 Market Depth 数据
-     * 参数名称	是否必须	类型	描述	默认值	取值范围
-        symbol	true	string	交易对		btcusdt, bchbtc, rcneth ...
-        type	true	string	Depth 类型		step0, step1, step2, step3, step4, step5（合并深度0-5）；step0时，不合并深度
+     * GET /market/depth
      * */
-    public function getDepth(array $data){
+    public function getDepth(array $data=[]){
         $this->type='GET';
         $this->path='/market/depth';
         
@@ -57,31 +54,31 @@ class Market extends Request
     }
     
     /**
-     *
+     *GET /market/trade
      * */
-    public function getTrade(array $data){
+    public function getTrade(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/market/trade';
         $this->data=$data;
         return $this->exec();
     }
     
     /**
-     *
+     *GET /market/history/trade
      * */
-    public function getHistoryTrade(array $data){
+    public function getHistoryTrade(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/market/history/trade';
         $this->data=$data;
         return $this->exec();
     }
     
     /**
-     * 
+     * GET /market/detail
      * */
-    public function getDetail(array $data){
+    public function getDetail(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/market/detail';
         $this->data=$data;
         return $this->exec();
     }

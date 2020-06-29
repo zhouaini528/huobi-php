@@ -12,9 +12,10 @@ use Lin\Huobi\Api\Spot\Margin;
 use Lin\Huobi\Api\Spot\Etf;
 use Lin\Huobi\Api\Spot\Common;
 use Lin\Huobi\Api\Spot\Account;
-use Lin\Huobi\Api\Spot\Fee;
 use Lin\Huobi\Api\Spot\Wallet;
 use Lin\Huobi\Api\Spot\AlgoOrder;
+use Lin\Huobi\Api\Spot\C2c;
+use Lin\Huobi\Api\Spot\CrossMargin;
 
 class HuobiSpot
 {
@@ -66,8 +67,22 @@ class HuobiSpot
     /**
      *
      * */
+    public function c2c(){
+        return  new C2c($this->init());
+    }
+    
+    /**
+     *
+     * */
     public function common(){
         return  new Common($this->init());
+    }
+    
+    /**
+     *
+     * */
+    public function crossmargin(){
+        return  new CrossMargin($this->init());
     }
     
     /**
@@ -103,13 +118,6 @@ class HuobiSpot
      * */
     public function subuser(){
         return  new Subuser($this->init());
-    }
-    
-    /**
-     *
-     * */
-    public function fee(){
-        return  new Fee($this->init());
     }
     
     /**
