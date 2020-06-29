@@ -10,11 +10,11 @@ use Lin\Huobi\Api\Spot\Order;
 use Lin\Huobi\Api\Spot\Market;
 use Lin\Huobi\Api\Spot\Margin;
 use Lin\Huobi\Api\Spot\Etf;
-use Lin\Huobi\Api\Spot\Dw;
 use Lin\Huobi\Api\Spot\Common;
 use Lin\Huobi\Api\Spot\Account;
-use Lin\Huobi\Api\Spot\Futures;
 use Lin\Huobi\Api\Spot\Fee;
+use Lin\Huobi\Api\Spot\Wallet;
+use Lin\Huobi\Api\Spot\AlgoOrder;
 
 class HuobiSpot
 {
@@ -59,15 +59,15 @@ class HuobiSpot
     /**
      *
      * */
-    public function common(){
-        return  new Common($this->init());
+    public function algoorder(){
+        return  new AlgoOrder($this->init());
     }
     
     /**
      *
      * */
-    public function dw(){
-        return  new Dw($this->init());
+    public function common(){
+        return  new Common($this->init());
     }
     
     /**
@@ -108,14 +108,14 @@ class HuobiSpot
     /**
      *
      * */
-    public function futures(){
-        return  new Futures($this->init());
+    public function fee(){
+        return  new Fee($this->init());
     }
     
     /**
-     *
-     * */
-    public function fee(){
-        return  new Fee($this->init());
+    *
+    * */
+    public function wallet(){
+        return  new Wallet($this->init());
     }
 }

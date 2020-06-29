@@ -57,4 +57,13 @@ class Account extends Request
         $this->path='/v2/account/ledger';
         return $this->exec();
     }
+    
+    /**
+     *POST /v1/futures/transfer
+     * */
+    public function postFuturesTransfer(array $data=[]){
+        $this->type='POST';
+        $this->path='/v1/futures/transfer';
+        return $this->exec();
+    }
 }
