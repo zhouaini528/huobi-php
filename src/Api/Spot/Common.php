@@ -32,11 +32,11 @@ class Common extends Request
     }
     
     /**
-     *
+     *GET /v1/common/timestamp
      * */
     public function getTimestamp(array $data=[]){
         $this->type='GET';
-        $this->path='';
+        $this->path='/v1/common/timestamp';
         $this->data=$data;
         return $this->exec();
     }
