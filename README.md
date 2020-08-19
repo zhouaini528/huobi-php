@@ -367,7 +367,7 @@ try {
 }
 ```
 
-[更多用例](https://github.com/zhouaini528/huobi-php/tree/master/tests/swap)
+[More Test](https://github.com/zhouaini528/huobi-php/tree/master/tests/swap)
 
-[更多API](https://github.com/zhouaini528/huobi-php/tree/master/src/Api/Swap)
+[More Api](https://github.com/zhouaini528/huobi-php/tree/master/src/Api/Swap)
 
