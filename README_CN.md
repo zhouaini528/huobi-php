@@ -36,6 +36,8 @@ Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huo
 
 [Bigone](https://github.com/zhouaini528/bigone-php)   
 
+[Crex24](https://github.com/zhouaini528/crex24-php)   
+
 #### 安装方式
 ```
 composer require linwj/huobi
