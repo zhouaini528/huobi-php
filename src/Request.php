@@ -118,11 +118,9 @@ class Request
      * 请求设置
      * */
     protected function options(){
-        $this->options=array_merge([
-            'headers'=>$this->headers,
-            //'verify'=>false   //关闭证书认证
-        ],$this->options);
+        if(isset($this->options['headers'])) $this->headers=array_merge($this->headers,$this->options['headers']);
 
+        $this->options['headers']=$this->headers;
         $this->options['timeout'] = $this->options['timeout'] ?? 60;
 
         if(isset($this->options['proxy']) && $this->options['proxy']===true) {
