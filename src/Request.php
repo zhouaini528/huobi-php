@@ -97,6 +97,7 @@ class Request
         $u = [];
         $sort_rank = [];
         foreach ($param as $k => $v) {
+            if(is_array($v)) $v=json_encode($v);
             $u[] = $k . "=" . urlencode($v);
             $sort_rank[] = ord($k);
         }
