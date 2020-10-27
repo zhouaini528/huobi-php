@@ -13,7 +13,7 @@ class Contract extends Request
 {
     /**
      * Restful	基础信息接口	api/v1/contract_contract_info	GET	获取合约信息	否
-     * 
+     *
      * symbol	string	false	"BTC","ETH"...
         contract_type	string	false	合约类型: （this_week:当周 next_week:下周 quarter:季度）
         contract_code	string	false	BTC180914
@@ -24,7 +24,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * GET api/v1/contract_index
      * */
@@ -34,7 +34,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * GET api/v1/contract_price_limit
      * */
@@ -44,7 +44,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * GET api/v1/contract_open_interest
      * */
@@ -54,7 +54,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET api/v1/contract_delivery_price
      * */
@@ -64,7 +64,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET api/v1/contract_risk_info
      * */
@@ -74,7 +74,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET `api/v1/contract_insurance_fund
      * */
@@ -84,7 +84,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET api/v1/contract_adjustfactor
      * */
@@ -94,7 +94,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET api/v1/contract_his_open_interest
      * */
@@ -104,8 +104,8 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
-    
+
+
     /**
      *GET api/v1/contract_elite_account_ratio
      * */
@@ -115,7 +115,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET api/v1/contract_elite_position_ratio
      * */
@@ -125,7 +125,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET api/v1/contract_liquidation_orders
      * */
@@ -135,7 +135,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *
      * */
@@ -145,8 +145,8 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     } */
-    
-    
+
+
     /**
      * 获取用户账户信息
      * symbol	false	string	品种代码		"BTC","ETH"...如果缺省，默认返回所有品种
@@ -157,7 +157,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * 获取用户持仓信息
      * symbol	false	string	品种代码		"BTC","ETH"...如果缺省，默认返回所有品种
@@ -168,7 +168,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * POST api/v1/contract_sub_account_list
      * */
@@ -178,7 +178,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_sub_account_info
      * */
@@ -188,7 +188,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_sub_position_info
      * */
@@ -198,7 +198,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_financial_record
      * */
@@ -208,7 +208,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_order_limit
      * */
@@ -218,7 +218,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_fee
      * */
@@ -228,7 +228,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_transfer_limit
      * */
@@ -238,7 +238,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *post api/v1/contract_position_limit
      * */
@@ -248,7 +248,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *post api/v1/contract_account_position_info
      * */
@@ -258,7 +258,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * 合约下单
      * 参数名	参数类型	必填	描述
@@ -276,16 +276,16 @@ class Contract extends Request
     public function postOrder(array $data=[]){
         $this->type='POST';
         $this->path='/api/v1/contract_order';
-        
+
         $data['lever_rate']=$data['lever_rate'] ?? 10;
         $data['order_price_type']=$data['order_price_type'] ?? 'limit';
-        
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     * 
+     *
      * */
     public function postBatchOrder(array $data=[]){
         $this->type='POST';
@@ -293,11 +293,11 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * 撤销订单
         URL api/v1/contract_cancel
-        
+
         参数名称	是否必须	类型	描述
         order_id	false	string	订单ID（ 多个订单ID中间以","分隔,一次最多允许撤消50个订单 ）
         client_order_id	false	string	客户订单ID(多个订单ID中间以","分隔,一次最多允许撤消50个订单)
@@ -309,7 +309,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * symbol	true	string	品种代码，如"BTC","ETH"...
      * */
@@ -319,13 +319,13 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * 获取合约订单信息
      * order_id	 false	string	订单ID（ 多个订单ID中间以","分隔,一次最多允许查询20个订单 ）
         client_order_id	false	string	客户订单ID(多个订单ID中间以","分隔,一次最多允许查询20个订单)
         symbol	true	string	"BTC","ETH"...
-        
+
         order_id 与  client_order_id  必须至少存在一个
      * */
     public function postOrderInfo(array $data=[]){
@@ -334,7 +334,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_order_detail
      * */
@@ -344,9 +344,9 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     * POST api/v1/contract_openorders 
+     * POST api/v1/contract_openorders
      * */
     public function postOpenOrders(array $data=[]){
         $this->type='POST';
@@ -354,7 +354,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_hisorders
      * */
@@ -364,7 +364,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_matchresults
      * */
@@ -374,7 +374,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * POST api/v1/contract_trigger_order
      * */
@@ -384,7 +384,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_trigger_cancel
      * */
@@ -394,7 +394,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_trigger_cancelall
      * */
@@ -404,7 +404,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_trigger_openorders
      * */
@@ -414,7 +414,7 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST api/v1/contract_trigger_hisorders
      * */
@@ -424,7 +424,18 @@ class Contract extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
+    /**
+     * POST api/v1/lightning_close_position
+     * */
+    public function postLightningClosePosition(array $data=[]){
+        $this->type='POST';
+        $this->path='/api/v1/lightning_close_position';
+
+        $this->data=$data;
+        return $this->exec();
+    }
+
     /**
      *
      * */
