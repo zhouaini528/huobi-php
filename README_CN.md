@@ -322,10 +322,12 @@ try {
 
 ```php
 $huobi=new HuobiSwap($key,$secret);
+//or new
+//$huobi=new HuobiLinear($key,$secret);
 
 //Place an Order
 try {
-    $result=$huobi->account()->postOrder([
+    $result=$huobi->trade()->postOrder([
         'contract_code'=>'ETH-USD',//   string  false   BTC180914
         'price'=>'100',//   decimal true    Price
         'volume'=>'1',//    long    true    Numbers of orders (amount)
@@ -343,7 +345,7 @@ try {
 
 //Get Information of an Order
 try {
-    $result=$huobi->account()->postOrderInfo([
+    $result=$huobi->trade()->postOrderInfo([
         'order_id'=>$result['data']['order_id'],//You can also 'xxxx,xxxx,xxxx' multiple ID
         //'client_order_id'=>'xxxx',
         'contract_code'=>'ETH-USD'
@@ -355,7 +357,7 @@ try {
 
 //Cancel an Order
 try {
-    $result=$huobi->account()->postCancel([
+    $result=$huobi->trade()->postCancel([
         'order_id'=>$result['data'][0]['order_id'],//You can also 'xxxx,xxxx,xxxx' multiple ID
         //'client_order_id'=>'xxxx',
         'contract_code'=>'ETH-USD'
