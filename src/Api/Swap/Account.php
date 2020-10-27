@@ -12,246 +12,179 @@ use Lin\Huobi\Request;
 class Account extends Request
 {
     /**
-     * 读取	账户接口	swap-api/v1/swap_account_info	POST	获取用户账户信息	是
+     *POST swap-api/v1/swap_account_info
      * */
     public function postAccountInfo(array $data=[]){
         $this->type='POST';
         $this->path='/swap-api/v1/swap_account_info';
-        
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *读取	账户接口	swap-api/v1/swap_position_info	POST	获取用户持仓信息	是
+     *POST swap-api/v1/swap_position_info
      * */
     public function postPositionInfo(array $data=[]){
         $this->type='POST';
         $this->path='/swap-api/v1/swap_position_info';
-        
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *读取	账户接口	swap-api/v1/swap_sub_account_list	POST	查询母账户下所有子账户资产信息	是
+     *post swap-api/v1/swap_account_position_info
+     * */
+    public function postAccountPositionInfo(array $data=[]){
+        $this->type='POST';
+        $this->path='/swap-api/v1/swap_account_position_info';
+
+        $this->data=$data;
+        return $this->exec();
+    }
+
+    /**
+     *POST swap-api/v1/swap_sub_account_list
      * */
     public function postSubAccountList(array $data=[]){
         $this->type='POST';
         $this->path='/swap-api/v1/swap_sub_account_list';
-        
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *读取	账户接口	swap-api/v1/swap_sub_account_info	POST	查询单个子账户资产信息	是
+     *POST swap-api/v1/swap_sub_account_info
      * */
     public function postSubAccountInfo(array $data=[]){
         $this->type='POST';
         $this->path='/swap-api/v1/swap_sub_account_info';
-        
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *读取	账户接口	swap-api/v1/swap_sub_position_info	POST	查询单个子账户持仓信息	是
+     *POST swap-api/v1/swap_sub_position_info
      * */
     public function postSubPositionInfo(array $data=[]){
         $this->type='POST';
         $this->path='/swap-api/v1/swap_sub_position_info';
-        
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *读取	账户接口	swap-api/v1/swap_financial_record	POST	查询用户财务记录	是
+     *POST swap-api/v1/swap_financial_record
      * */
     public function postFinancialRecord(array $data=[]){
         $this->type='POST';
         $this->path='/swap-api/v1/swap_financial_record';
-        
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *读取	账户接口	swap-api/v1/swap_order_limit	POST	查询用户当前的下单量限制	是
+     *POST swap-api/v1/swap_user_settlement_records
+     * */
+    public function postUserSettlementRecords(array $data=[]){
+        $this->type='POST';
+        $this->path='/swap-api/v1/swap_user_settlement_records';
+
+        $this->data=$data;
+        return $this->exec();
+    }
+
+    /**
+     *POST swap-api/v1/swap_available_level_rate
+     * */
+    public function postAvailableLevelRate(array $data=[]){
+        $this->type='POST';
+        $this->path='/swap-api/v1/swap_available_level_rate';
+
+        $this->data=$data;
+        return $this->exec();
+    }
+
+    /**
+     *POST swap-api/v1/swap_order_limit
      * */
     public function postOrderLimit(array $data=[]){
         $this->type='POST';
         $this->path='/swap-api/v1/swap_order_limit';
-        
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *读取	账户接口	swap-api/v1/swap_fee	POST	查询用户当前的手续费费率	是
+     *POST swap-api/v1/swap_fee
      * */
     public function postFee(array $data=[]){
         $this->type='POST';
         $this->path='/swap-api/v1/swap_fee';
-        
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
+
     /**
-     *读取	账户接口	swap-api/v1/swap_transfer_limit	POST	查询用户当前的划转限制	是
+     *POST swap-api/v1/swap_transfer_limit
      * */
     public function postTransferLimit(array $data=[]){
         $this->type='POST';
         $this->path='/swap-api/v1/swap_transfer_limit';
-        
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *读取	账户接口	swap-api/v1/swap_position_limit	POST	用户持仓量限制的查询	是
+     *post swap-api/v1/swap_position_limit
      * */
     public function postPositionLimit(array $data=[]){
         $this->type='POST';
         $this->path='/swap-api/v1/swap_position_limit';
-        
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *交易	账户接口	swap-api/v1/swap_order	POST	合约下单	是
+     *post /swap-api/v1/swap_master_sub_transfer
      * */
-    public function postOrder(array $data=[]){
+    public function postMasterSubTransfer(array $data=[]){
         $this->type='POST';
-        $this->path='/swap-api/v1/swap_order';
-        
-        $data['lever_rate']=$data['lever_rate'] ?? 20;
-        
+        $this->path='/swap-api/v1/swap_master_sub_transfer';
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *交易	账户接口	swap-api/v1/swap_batchorder	POST	合约批量下单	是
+     *post /swap-api/v1/swap_master_sub_transfer_record
      * */
-    public function postBatchorder(array $data=[]){
+    public function postMasterSubTransferRecord(array $data=[]){
         $this->type='POST';
-        $this->path='/swap-api/v1/swap_batchorder';
-        
+        $this->path='/swap-api/v1/swap_master_sub_transfer_record';
+
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *交易	账户接口	swap-api/v1/swap_cancel	POST	撤销订单	是
+     *get /swap-api/v1/swap_api_trading_status
      * */
-    public function postCancel(array $data=[]){
-        $this->type='POST';
-        $this->path='/swap-api/v1/swap_cancel';
-        
+    public function getApiTradingStatus(array $data=[]){
+        $this->type='GET';
+        $this->path='/swap-api/v1/swap_api_trading_status';
+
         $this->data=$data;
         return $this->exec();
     }
-    
-    /**
-     *交易	账户接口	swap-api/v1/swap_cancelall	POST	全部撤单	是
-     * */
-    public function postCancelall(array $data=[]){
-        $this->type='POST';
-        $this->path='/swap-api/v1/swap_cancelall';
-        
-        $this->data=$data;
-        return $this->exec();
-    }
-    
-    /**
-     *交易	账户接口	swap-api/v1/swap_order_info	POST	获取合约订单信息	是
-     * */
-    public function postOrderInfo(array $data=[]){
-        $this->type='POST';
-        $this->path='/swap-api/v1/swap_order_info';
-        
-        $this->data=$data;
-        return $this->exec();
-    }
-    
-    /**
-     *交易	账户接口	swap-api/v1/swap_order_detail	POST	获取订单明细信息	是
-     * */
-    public function postOrderDetail(array $data=[]){
-        $this->type='POST';
-        $this->path='/swap-api/v1/swap_order_detail';
-        
-        $this->data=$data;
-        return $this->exec();
-    }
-    
-    /**
-     *交易	账户接口	swap-api/v1/swap_openorders	POST	获取合约当前未成交委托	是
-     * */
-    public function postOpenorders(array $data=[]){
-        $this->type='POST';
-        $this->path='/swap-api/v1/swap_openorders';
-        
-        $this->data=$data;
-        return $this->exec();
-    }
-    
-    /**
-     *交易	账户接口	swap-api/v1/swap_hisorders	POST	获取合约历史委托	是
-     * */
-    public function postHisorders(array $data=[]){
-        $this->type='POST';
-        $this->path='/swap-api/v1/swap_hisorders';
-        
-        $this->data=$data;
-        return $this->exec();
-    }
-    
-    /**
-     *交易	账户接口	swap-api/v1/swap_matchresults	POST	获取历史成交记录	是
-     * */
-    public function postMatchresults(array $data=[]){
-        $this->type='POST';
-        $this->path='/swap-api/v1/swap_matchresults';
-        
-        $this->data=$data;
-        return $this->exec();
-    }
-    
-    /**
-     *交易	账户接口	swap-api/v1/swap_lightning_close_position	POST	闪电平仓下单	是
-     * */
-    public function postLightningClosePosition(array $data=[]){
-        $this->type='POST';
-        $this->path='/swap-api/v1/swap_lightning_close_position';
-        
-        $this->data=$data;
-        return $this->exec();
-    }
-    
-    /**
-     *交易	账户接口	swap-api/v1/swap_liquidation_orders	POST	获取强平订单	是
-     * */
-    public function postLiquidationOrders(array $data=[]){
-        $this->type='POST';
-        $this->path='/swap-api/v1/swap_liquidation_orders';
-        
-        $this->data=$data;
-        return $this->exec();
-    }
-    
-    /**
-     *
-     * */
-    /* public function post(array $data=[]){
-        $this->type='POST';
-        $this->path='';
-        
-        $this->data=$data;
-        return $this->exec();
-    } */
 }
