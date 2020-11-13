@@ -3,9 +3,9 @@
 
 /**
  * @author lin <465382251@qq.com>
- * 
+ *
  * Fill in your key and secret and pass can be directly run
- * 
+ *
  * Most of them are unfinished and need your help
  * https://github.com/zhouaini528/huobi-php.git
  * */
@@ -21,9 +21,9 @@ $huobi=new HuobiSpot($key,$secret);
 $huobi->setOptions([
     //Set the request timeout to 60 seconds by default
     'timeout'=>10,
-    
+
     //If you are developing locally and need an agent, you can set this
-    'proxy'=>true,
+    //'proxy'=>true,
     //More flexible Settings
     /* 'proxy'=>[
      'http'  => 'http://127.0.0.1:12333',
@@ -41,7 +41,7 @@ try {
         'account-id'=>$account_id,
         'symbol'=>'btcusdt',
         'type'=>'buy-limit',
-        'amount'=>'0.001',
+        'amount'=>'0.1',
         'price'=>'1000',
     ]);
     print_r($result);
@@ -70,7 +70,7 @@ try {
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
 }
-
+die;
 //***********************Customize the order ID
 //Place an Order
 try {
@@ -109,7 +109,7 @@ try {
     print_r($result);
 }catch (\Exception $e){
     print_r(json_decode($e->getMessage(),true));
-} 
+}
 
 
 

@@ -56,23 +56,23 @@ class SocketServer
         switch ($this->config['platform']){
             case 'option':{
                 if(empty($keysecret)) return $this->market_url='ws://api.hbdm.com/option-ws';
-                return $this->market_url='ws://api.hbdm.com/option-notification';
+                return $this->order_url='ws://api.hbdm.com/option-notification';
             }
             case 'linear':{
                 if(empty($keysecret)) return $this->market_url='ws://api.hbdm.com/linear-swap-ws';
-                return 'ws://api.hbdm.com/linear-swap-notification';
+                return $this->order_url='ws://api.hbdm.com/linear-swap-notification';
             }
             case 'swap':{
                 if(empty($keysecret)) return $this->market_url='ws://api.hbdm.com/swap-ws';
-                return 'ws://api.hbdm.com/swap-notification';
+                return $this->order_url='ws://api.hbdm.com/swap-notification';
             }
             case 'future':{
                 if(empty($keysecret)) return $this->market_url='ws://api.hbdm.com/ws';
-                return 'ws://api.hbdm.com/notificatio';
+                return $this->order_url='ws://api.hbdm.com/notification';
             }
             default:{//spot
                 if(empty($keysecret)) return $this->market_url='ws://api.huobi.pro/ws';
-                return 'ws://api.huobi.pro/ws/v2';
+                return $this->order_url='ws://api.huobi.pro/ws/v2';
             }
         }
     }
@@ -107,22 +107,35 @@ class SocketServer
             if(empty($keysecret)) return;
 
             $this->keysecretInit($keysecret,[
-                'connection'=>1
+                'connection'=>1,
+                'auth'=>0,
             ]);
 
             switch ($this->config['platform']){
                 case 'spot':{
-
                     $data=[
                         "action"=>"req",
                         "ch"=>"auth",
                         'params'=>$this->auth($this->order_url,$keysecret),
                     ];
 
-                    print_r($data);
+                    $con->send(json_encode($data));
+
+                    $this->log($keysecret['key'].' private send auth');
+                    $this->log($data);
                     break;
                 }
                 default:{
+                    $data=[
+                        "op"=>"auth",
+                        "type"=>"api",
+                    ];
+                    $data=array_merge($data,$this->auth($this->order_url,$keysecret));
+
+                    $con->send(json_encode($data));
+
+                    $this->log($keysecret['key'].' private send auth');
+                    $this->log($data);
                     break;
                 }
             }
@@ -133,35 +146,68 @@ class SocketServer
 
     private function onMessage($global){
         return function($con,$data) use($global){
+            $data=$this->getDecodeData($con->tag,$data);
 
-            if($con->tag=='public'){
-                $data=gzdecode($data);
-                $data=json_decode($data,true);
+            //******************************************public
+            //public ping
+            if(isset($data['ping'])) {
+                $con->send(json_encode(['pong'=>$data['ping']]));
+                $this->log($con->tag.' send pong '.$data['ping']);
+                return;
+            }
 
-                if(isset($data['ch'])) {
-                    $table=strtolower($data['ch']);
+            //pulibc market
+            if(isset($data['ch']) && $data['ch']!='auth') {
+                $table=strtolower($data['ch']);
+                $global->save($table,$data);
+                return;
+            }
 
-                    $global->save($table,$data);
-                    return;
-                }
+            //******************************************spot
+            //spot order ping
+            if(isset($data['action']) && $data['action']=='ping') {
+                $temp=$data;
+                $temp['action']='pong';
+                $con->send(json_encode($temp));
+                $this->log($con->tag_keysecret['key'].' send pong '.$temp['data']['ts']);
+                return;
+            }
 
-                //spot ping
-                if(isset($data['ping'])) {
-                    $con->send(json_encode(['pong'=>$data['ping']]));
-                    $this->log($con->tag.' send pong '.$data['ping']);
-                    return;
-                }
-            }else{//private sub
-                $data=json_decode($data,true);
-                //spot order ping
-                if(isset($data['action']) && $data['action']=='ping') {
-                    $temp=$data;
-                    $temp['action']='pong';
-                    print_r($temp);
-                    $con->send(json_encode($temp));
-                    $this->log($con->tag_keysecret['key'].' send pong '.$temp['data']['ts']);
-                    return;
-                }
+            //spot order auth login
+            if(isset($data['ch']) && $data['ch']!='auth' && $data['code']=='200') {
+                $this->keysecretInit($con->tag_keysecret,[
+                    'connection'=>1,
+                    'auth'=>1,
+                ]);
+                $this->log($con->tag_keysecret['key'].' auth login '.json_encode($data));
+                return;
+            }
+
+            //******************************************dont spot
+            //dont spot order ping
+            if(isset($data['op']) && $data['op']=='ping') {
+                $temp=$data;
+                $temp['op']='pong';
+                $con->send(json_encode($temp));
+                $this->log($con->tag_keysecret['key'].' send pong '.$temp['ts']);
+                return;
+            }
+
+            //dont spot order auth login
+            if(isset($data['op']) && $data['op']=='auth' && isset($data['data']['user-id'])) {
+                $this->keysecretInit($con->tag_keysecret,[
+                    'connection'=>1,
+                    'auth'=>1,
+                ]);
+                $this->log($con->tag_keysecret['key'].' auth login '.json_encode($data));
+                return;
+            }
+
+            if(isset($data['topic'])) {
+                $table=strtolower($data['topic']);
+                if($con->tag != 'public') $table=$this->userKey($con->tag_keysecret,$table);
+                $global->save($table,$data);
+                return;
             }
 
             $this->log($data);
@@ -203,8 +249,6 @@ class SocketServer
 
             $this->order($con,$global);
 
-            $this->auth($con,$global);
-
             $this->log('listen '.$con->tag);
         });
     }
@@ -243,37 +287,44 @@ class SocketServer
                 $this->log('public subscribe send');
             }
 
-            $sub=$temp['public'];
+            $global->addSubUpdate($temp['public']);
+            $global->allSubUpdate($temp['public'],'add');
         }
 
         if($con->tag!='public' && !empty($temp['private'])){
-            //echo 'private subscribe need login'.PHP_EOL;
             //判断是否鉴权登录
             $keysecret=$global->get('keysecret');
 
+            $temp_sub=[];
             foreach ($temp['private'] as $v){
                 if($keysecret[$v[1]['key']]['auth']==0) continue;
 
-                $data=[
-                    "action"=>'sub',
-                    'ch'=>current($v)
-                ];
+                if($this->getPlatform()=='spot'){
+                    $data=[
+                        "action"=>'sub',
+                        'ch'=>current($v)
+                    ];
+                }else{
+                    $data=[
+                        "op"=>'sub',
+                        'topic'=>current($v)
+                    ];
+                }
+
                 $data=json_encode($data);
                 $con->send($data);
 
                 $this->log($data);
                 $this->log($con->tag_keysecret['key'].' subscribe send');
+
+                $temp_sub[]=$v;
             }
 
-            $sub=$temp['private'];
+            if(!empty($temp_sub)){
+                $global->addSubUpdate($temp_sub);
+                $global->allSubUpdate($temp_sub,'add');
+            }
         }
-
-        //*******订阅成功后，删除add_sub  public 值
-        $global->addSubUpdate($sub);
-
-        //*******订阅成功后 更改 all_sub  public 值
-        $global->allSubUpdate($sub,'add');
-
         return;
     }
 
@@ -289,7 +340,7 @@ class SocketServer
 
         foreach ($unsub as $v){
             $data=[
-                "unsub"=>$v,
+                "unsub"=>current($v),
                 'id'=>$this->getId()
             ];
 
@@ -332,7 +383,7 @@ class SocketServer
                         $this->keysecretInit($v,[
                             'connection'=>2,
                             'connection_close'=>0,
-                            'auth'=>0,//是否鉴权
+                            'auth'=>0,
                         ]);
 
                         $this->log('private order new connection '.$v['key']);

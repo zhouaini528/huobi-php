@@ -102,38 +102,69 @@ trait SocketFunction
     }
 
     private function auth(string $host,array $keysecret){
-        $param = [
-            'accessKey' => $keysecret['key'],
-            'signatureMethod' => 'HmacSHA256',
-            'signatureVersion' => 2.1,
-            'timestamp' => gmdate('Y-m-d\TH:i:s'),
-        ];
+        $platform=$this->getPlatform();
 
-        $param=$this->sort($param);
-        $host_tmp=explode('/', $host);
-        if(isset($host_tmp[1])) $temp="GET\n" . $host_tmp[2] . "\n" . '/ws/v2' . "\n" . implode('&', $param);
+        if($platform=='spot'){
+            $param = [
+                'accessKey' => $keysecret['key'],
+                'signatureMethod' => 'HmacSHA256',
+                'signatureVersion' => '2.1',
+                'timestamp' => gmdate('Y-m-d\TH:i:s'),
+            ];
+            //accessKey，signatureMethod，signatureVersion，timestamp
+            $param_tmp=$this->sort($param);
+            $host_tmp=explode('/', $host);
+            if(isset($host_tmp[1])) $temp="GET\n" . $host_tmp[2] . "\n" . '/ws/v2' . "\n" . implode('&', $param_tmp);
 
-        $signature=base64_encode(hash_hmac('sha256', $temp ?? '', $keysecret['secret'], true));
+            print_r($keysecret);
+            echo $temp.PHP_EOL;
+            $signature=base64_encode(hash_hmac('sha256', $temp ?? '', $keysecret['secret'], true));
 
-        return array_merge($param,[
-            "authType"=>"api",
-            "signature"=> $signature
-        ]);
+            return array_merge($param,[
+                "authType"=>"api",
+                "signature"=> $signature
+            ]);
+        }else{
+            $param = [
+                'AccessKeyId' => $keysecret['key'],
+                'SignatureMethod' => 'HmacSHA256',
+                'SignatureVersion' => '2',
+                'Timestamp' => gmdate('Y-m-d\TH:i:s'),
+            ];
+
+            $param_tmp=$this->sort($param);
+
+            $host_tmp=explode('/', $host);
+            if(isset($host_tmp[1])) $temp="GET\n" . $host_tmp[2] . "\n/" . $host_tmp[3] . "\n" . implode('&', $param_tmp);
+
+            $signature=base64_encode(hash_hmac('sha256', $temp ?? '', $keysecret['secret'], true));
+
+            return array_merge($param,[
+                "Signature"=> $signature
+            ]);
+        }
+
     }
 
-    private function auth2(array $keysecret){
-        $param = [
-            'AccessKeyId' => $keysecret['key'],
-            'SignatureMethod' => 'HmacSHA256',
-            'SignatureVersion' => 2,
-            'Timestamp' => gmdate('Y-m-d\TH:i:s'),
-        ];
-        //accessKey，signatureMethod，signatureVersion，timestamp
-        $param=$this->sort($param);
-        print_r($param);
-        $host_tmp=explode('ws://', 'ws://api.huobi.pro/ws/v2');
-        if(isset($host_tmp[1])) $temp="GET\n" . $host_tmp[1] . "\n" . '/ws/v2' . "\n" . implode('&', $param);
+    private function getPlatform(){
+        $platform='spot';
+        if(is_array($this->config['platform'])) $platform=$this->config['platform']['type'];
+        else $platform=$this->config['platform'];
 
-        return base64_encode(hash_hmac('sha256', $temp ?? '', $keysecret['secret'], true));
+        return $platform;
+    }
+
+    /**
+     * @param $tag
+     * @param $data
+     * @return array
+     */
+    private function getDecodeData($tag,$data){
+        $platform=$this->getPlatform();
+
+        if($tag != 'public' && $platform=='spot') return json_decode($data,true);
+
+        $data=gzdecode($data);
+        return json_decode($data,true);
     }
 }

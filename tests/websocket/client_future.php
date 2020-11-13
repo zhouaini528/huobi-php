@@ -21,7 +21,7 @@ $huobi->config([
     //Do you want to enable local logging,default false
     //'log'=>true,
     //Or set the log name
-    'log'=>['filename'=>'spot'],
+    'log'=>['filename'=>'future'],
 
     //Daemons address and port,default 0.0.0.0:2211
     //'global'=>'127.0.0.1:2211',
@@ -29,11 +29,11 @@ $huobi->config([
     //Channel subscription monitoring time,2 seconds
     //'listen_time'=>2,
 
-    //Channel data update time,0.1 seconds
-    //'data_time'=>0.1,
+    //Channel data update time,default 0.5 seconds
+    //'data_time'=>0.5,
 
     //Set up subscription platform, default 'spot'
-    'platform'=>'spot', //options value 'spot' 'future' 'swap' 'linear' 'option'
+    'platform'=>'future', //options value 'spot' 'future' 'swap' 'linear' 'option'
     //or set
     /*'platform'=>[
         'type'=>'spot',
@@ -50,8 +50,8 @@ switch ($action){
     //subscribe
     case 1:{
         $huobi->subscribe([
-            'market.btcusdt.depth.step0',
-            'market.bchusdt.depth.step0',
+            'market.BTC_CQ.depth.step0',
+            'market.ETH_CQ.depth.step0',
         ]);
         break;
     }
@@ -59,8 +59,8 @@ switch ($action){
     //unsubscribe
     case 2:{
         $huobi->unsubscribe([
-            'market.btcusdt.depth.step0',
-            'market.bchusdt.depth.step0',
+            'market.BTC_CQ.depth.step0',
+            'market.ETH_CQ.depth.step0',
         ]);
 
         break;
@@ -69,11 +69,10 @@ switch ($action){
     case 3:{
 
         $huobi->subscribe([
-            'market.btcusdt.kline.1min',
-            'market.btcusdt.bbo',
-            'market.btcusdt.trade.detail',
-            'market.btcusdt.detail',
-            'market.btcusdt.etp',
+            'market.BTC_CQ.kline.1min',
+            'market.BTC_CQ.bbo',
+            'market.BTC_CQ.trade.detail',
+            'market.BTC_CQ.detail',
         ]);
 
         break;
@@ -81,8 +80,8 @@ switch ($action){
 
     case 4:{
         $huobi->unsubscribe([
-            'btcusdt@aggTrade',
-            'btcusdt@trade',
+            'market.BTC_CQ.kline.1min',
+            'market.BTC_CQ.bbo',
             //'btcusdt@kline_1d',
             //'btcusdt@depth20'
         ]);
@@ -99,16 +98,20 @@ switch ($action){
             'secret'=>'xxxxxxxxx',
         ]);
         */
-        /*echo $huobi->client()->test3($key_secret[0]).PHP_EOL;
-        die;*/
+
         $huobi->keysecret($key_secret[0]);
         $huobi->subscribe([
-            //'market.btcusdt.kline.1min',
-            //'market.btcusdt.bbo',
+            //public
+            /*'market.BTC_CQ.depth.step0',
+            'market.ETH_CQ.depth.step0',*/
 
-            'orders#btcusdt',
-            'trade.clearing#btcusdt#1',
-            'accounts.update#1',
+            //private
+            /*'orders.btc',
+            'accounts.btc',
+            'positions.btc',
+            'trigger_order.BTC'*/
+
+            'accounts.eos',
         ]);
 
         break;
@@ -117,7 +120,7 @@ switch ($action){
     //unsubscribe
     case 11:{
         $huobi->keysecret($key_secret[0]);
-        //unSubscribe to all private channels by default
+
         $huobi->unsubscribe();
 
         break;
@@ -190,11 +193,14 @@ switch ($action){
         //The first way
         $huobi->keysecret($key_secret[0]);
         $data=$huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'orders.btc',
+            'accounts.btc',
+            'accounts.usdt',
+            'positions.btc',
+            'trigger_order.BTC'
         ]);
         print_r(json_encode($data));
-
+        die;
         //The second way callback
         $huobi->keysecret($key_secret[0]);
         $huobi->getSubscribe([

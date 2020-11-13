@@ -31,7 +31,7 @@ $Huobi->config([
     //'data_time'=>0.5,
 
     //Set up subscription platform, default 'spot'
-    'platform'=>'spot', //options value 'spot' 'future' 'swap' 'linear' 'option'
+    'platform'=>'future', //options value 'spot' 'future' 'swap' 'linear' 'option'
     //or set
     /*'platform'=>[
         'type'=>'spot',
