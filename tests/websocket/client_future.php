@@ -140,7 +140,7 @@ switch ($action){
         //The first way
         $data=$huobi->getSubscribes();
         print_r(json_encode($data));
-        die;
+
         //The second way callback
         $huobi->getSubscribes(function($data){
             print_r(json_encode($data));
@@ -159,22 +159,23 @@ switch ($action){
 
         //The first way
         $data=$huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.BTC_CQ.depth.step0',
+            'market.ETH_CQ.depth.step0',
         ]);
+        print_r($data);
 
         //The second way callback
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.BTC_CQ.depth.step0',
+            'market.ETH_CQ.depth.step0',
         ],function($data){
             print_r(json_encode($data));
         });
 
         //The third way is to guard the process
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.BTC_CQ.depth.step0',
+            'market.ETH_CQ.depth.step0',
         ],function($data){
             print_r(json_encode($data));
         },true);
@@ -188,19 +189,26 @@ switch ($action){
         //The first way
         $huobi->keysecret($key_secret[0]);
         $data=$huobi->getSubscribe([
-            'orders.btc',
-            'accounts.btc',
-            'accounts.usdt',
-            'positions.btc',
-            'trigger_order.BTC'
+            'market.BTC_CQ.depth.step0',
+            //'market.ETH_CQ.depth.step0',
+
+            'orders.eos',
+            'accounts.eos',
+            'positions.eos',
+            //'trigger_order.eos',
         ]);
         print_r(json_encode($data));
-        die;
+
         //The second way callback
         $huobi->keysecret($key_secret[0]);
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.BTC_CQ.depth.step0',
+            //'market.ETH_CQ.depth.step0',
+
+            'orders.eos',
+            'accounts.eos',
+            'positions.eos',
+            //'trigger_order.eos',
         ],function($data){
             print_r(json_encode($data));
         });
@@ -208,8 +216,13 @@ switch ($action){
         //The third way is to guard the process
         $huobi->keysecret($key_secret[0]);
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.BTC_CQ.depth.step0',
+            //'market.ETH_CQ.depth.step0',
+
+            'orders.eos',
+            'accounts.eos',
+            'positions.eos',
+            //'trigger_order.eos',
         ],function($data){
             print_r(json_encode($data));
         },true);

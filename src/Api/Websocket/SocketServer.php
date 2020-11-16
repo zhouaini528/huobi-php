@@ -183,6 +183,7 @@ class SocketServer
                 return;
             }
 
+
             //******************************************dont spot
             //dont spot order ping
             if(isset($data['op']) && $data['op']=='ping') {
@@ -258,11 +259,9 @@ class SocketServer
     }*/
 
     private function subscribe($con,$global){
-        if(empty($global->get('add_sub'))) return;
-
         $sub=$global->get('add_sub');
         if(empty($sub)) {
-            $this->log('subscribe dont change return');
+            //$this->log($con->tag.' subscribe dont change return');
             return;
         }
 
@@ -329,33 +328,69 @@ class SocketServer
     }
 
     private function unsubscribe($con,$global){
-        if(empty($this->get('del_sub'))) return;
-
         $unsub=$this->get('del_sub');
-
         if(empty($unsub)) {
-            $this->log('unsubscribe dont change return');
+            //$this->log($con->tag.' unsubscribe dont change return');
             return;
         }
 
-        foreach ($unsub as $v){
-            $data=[
-                "unsub"=>current($v),
-                'id'=>$this->getId()
-            ];
-
-            $data=json_encode($data);
-            $con->send($data);
-
-            $this->log($data);
-            $this->log('public unsubscribe send');
+        //是否有私有订阅
+        $temp=['public'=>[],'private'=>[]];
+        foreach ($unsub as $k=>$v){
+            if(count($v)>1) array_push($temp['private'],$v);
+            else array_push($temp['public'],$v);
         }
 
-        //*******订阅成功后，删除del_sub  public 值
-        $global->delSubUpdate();
+        if($con->tag=='public' && !empty($temp['public'])){
+            foreach ($temp['public'] as $v){
+                $data=[
+                    "unsub"=>current($v),
+                    'id'=>$this->getId()
+                ];
 
-        //*******订阅成功后 更改 all_sub  public 值
-        $global->allSubUpdate($unsub,'del');
+                $data=json_encode($data);
+                $con->send($data);
+
+                $this->log($data);
+                $this->log('public unsubscribe send');
+            }
+
+            //*******订阅成功后，删除del_sub  public 值
+            $global->delSubUpdate($temp['public']);
+
+            //*******订阅成功后 更改 all_sub  public 值
+            $global->allSubUpdate($temp['public'],'del');
+        }
+
+        if($con->tag!='public' && !empty($temp['private'])){
+            $temp_sub=[];
+            foreach ($temp['private'] as $v){
+                if($this->getPlatform()=='spot'){
+                    $data=[
+                        "action"=>'unsub',
+                        'ch'=>current($v)
+                    ];
+                }else{
+                    $data=[
+                        "op"=>'unsub',
+                        'topic'=>current($v)
+                    ];
+                }
+
+                $data=json_encode($data);
+                $con->send($data);
+
+                $this->log($data);
+                $this->log($con->tag_keysecret['key'].' unsubscribe send');
+
+                $temp_sub[]=$v;
+            }
+
+            if(!empty($temp_sub)){
+                $global->delSubUpdate($temp_sub);
+                $global->allSubUpdate($temp_sub,'del');
+            }
+        }
 
         return;
     }
