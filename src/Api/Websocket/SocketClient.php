@@ -51,9 +51,6 @@ class SocketClient
      * @param array $sub
      */
     public function subscribe(array $sub=[]){
-        /*print_r($this->resub($sub));
-        die;*/
-
         // 是否又私有频道订阅
         if(!empty($this->keysecret)) {
             $keysecret=$this->get('keysecret');
@@ -72,12 +69,12 @@ class SocketClient
      */
     public function unsubscribe(array $sub=[]){
         // 是否又私有频道订阅
-        if(!empty($this->keysecret)) {
+        /*if(!empty($this->keysecret)) {
             if(!isset($keysecret[$this->keysecret['key']]['connection']))
             $this->keysecretInit($this->keysecret,[
                 'connection_close'=>1,
             ]);
-        }
+        }*/
 
         $this->save('del_sub',$this->resub($sub));
     }
@@ -111,7 +108,7 @@ class SocketClient
         $worker->onWorkerStart = function() use($callback,$sub) {
             $global = $this->client();
 
-            $time=isset($this->config['data_time']) ? $this->config['data_time'] : 0.1 ;
+            $time=isset($this->config['data_time']) ? $this->config['data_time'] : 0.5 ;
 
             Timer::add($time, function() use ($global,$callback,$sub){
                 $this->getData($global,$callback,$sub);

@@ -82,8 +82,8 @@ switch ($action){
         $huobi->unsubscribe([
             'market.BTC_CQ.kline.1min',
             'market.BTC_CQ.bbo',
-            //'btcusdt@kline_1d',
-            //'btcusdt@depth20'
+            'market.BTC_CQ.trade.detail',
+            'market.BTC_CQ.detail',
         ]);
 
         break;
@@ -102,16 +102,14 @@ switch ($action){
         $huobi->keysecret($key_secret[0]);
         $huobi->subscribe([
             //public
-            /*'market.BTC_CQ.depth.step0',
-            'market.ETH_CQ.depth.step0',*/
+            'market.BTC_CQ.depth.step0',
+            'market.ETH_CQ.depth.step0',
 
             //private
-            /*'orders.btc',
-            'accounts.btc',
-            'positions.btc',
-            'trigger_order.BTC'*/
-
+            'orders.eos',
             'accounts.eos',
+            'positions.eos',
+            'trigger_order.eos',
         ]);
 
         break;
@@ -121,23 +119,20 @@ switch ($action){
     case 11:{
         $huobi->keysecret($key_secret[0]);
 
-        $huobi->unsubscribe();
+        $huobi->unsubscribe([
+            //public
+            'market.BTC_CQ.depth.step0',
+            'market.ETH_CQ.depth.step0',
 
-        break;
-    }
-
-    case 12:{
-        $huobi->keysecret($key_secret[0]);
-        //Subscribe to all private channels by default
-        $huobi->subscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            //private
+            'orders.eos',
+            'accounts.eos',
+            'positions.eos',
+            'trigger_order.eos',
         ]);
 
         break;
     }
-
-
 
     case 20:{
         //****Three ways to get all data

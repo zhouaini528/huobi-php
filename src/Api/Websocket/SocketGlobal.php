@@ -90,8 +90,20 @@ trait SocketGlobal
     protected function delSubUpdate($data=[]){
         do{
             $old_value=$new_value=$this->client->del_sub;
-            foreach ($new_value as $k=>$v){
-                unset($new_value[$k]);
+            /*print_r($old_value);
+            print_r($data);*/
+            foreach ($data as $k=>$v){
+                if(count($v)>1){
+                    foreach ($new_value as $ok=>$ov){
+                        if($v[0]==$ov[0] && $v[1]['key']==$ov[1]['key']) {
+                            unset($new_value[$ok]);
+                        }
+                    }
+                }else{
+                    foreach ($new_value as $ok=>$ov) {
+                        if ($v[0] == $ov[0]) unset($new_value[$ok]);
+                    }
+                }
             }
         }
         while(!$this->client->cas('del_sub', $old_value, $new_value));
@@ -105,16 +117,38 @@ trait SocketGlobal
             foreach ($data as $v){
                 switch ($type){
                     case 'add':{
-                        if(is_array($v)){
-                            if(!isset($new_value[$v[0]])) $new_value[$v[0]]=$v[0];
-                            else $new_value[$v[0]]=array_unique(array_merge($new_value[$v[0]],$v));
+                        if(count($v)>1){
+                            //数据格式
+                            /*$v=[
+                                [
+                                    'orders.btc',
+                                    ['key','keysecret']
+                                ]
+                            ];*/
+                            $key=$v[1]['key'];
+                            $value=[$this->userKey($v[1],strtolower($v[0]))];
+                            if(!isset($new_value[$key])) $new_value[$key]=$value;
+                            else $new_value[$key]=array_unique(array_merge($new_value[$key],$value));
                         }else{
-                            $new_value[$v[0]]=$v;
+                            $new_value[$v[0]]=$v[0];
                         }
                         break;
                     }
                     case 'del':{
-                        unset($new_value[$v[0]]);
+                        if(count($v)>1){
+                            $key=$v[1]['key'];
+                            $value=$this->userKey($v[1],strtolower($v[0]));
+
+                            //删除单个用户订阅删除
+                            foreach ($new_value[$key] as $k=>$v){
+                                if($v==$value) unset($new_value[$key][$k]);
+                            }
+
+                            //如果该用户没有删除数据 则直接删除整个数据
+                            if(empty($new_value[$key])) unset($new_value[$key]);
+                        }else{
+                            unset($new_value[$v[0]]);
+                        }
                         break;
                     }
                 }
