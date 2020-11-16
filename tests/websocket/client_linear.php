@@ -21,7 +21,7 @@ $huobi->config([
     //Do you want to enable local logging,default false
     //'log'=>true,
     //Or set the log name
-    'log'=>['filename'=>'spot'],
+    'log'=>['filename'=>'linear'],
 
     //Daemons address and port,default 0.0.0.0:2211
     //'global'=>'127.0.0.1:2211',
@@ -29,11 +29,11 @@ $huobi->config([
     //Channel subscription monitoring time,2 seconds
     //'listen_time'=>2,
 
-    //Channel data update time,0.1 seconds
-    //'data_time'=>0.1,
+    //Channel data update time,default 0.5 seconds
+    //'data_time'=>0.5,
 
     //Set up subscription platform, default 'spot'
-    'platform'=>'spot', //options value 'spot' 'future' 'swap' 'linear' 'option'
+    'platform'=>'linear', //options value 'spot' 'future' 'swap' 'linear' 'option'
     //or set
     /*'platform'=>[
         'type'=>'spot',
@@ -50,8 +50,8 @@ switch ($action){
     //subscribe
     case 1:{
         $huobi->subscribe([
-            'market.btcusdt.depth.step0',
-            'market.bchusdt.depth.step0',
+            'market.BTC-USDT.depth.step0',
+            'market.ETH-USDT.depth.step0',
         ]);
         break;
     }
@@ -59,8 +59,8 @@ switch ($action){
     //unsubscribe
     case 2:{
         $huobi->unsubscribe([
-            'market.btcusdt.depth.step0',
-            'market.bchusdt.depth.step0',
+            'market.BTC-USDT.depth.step0',
+            'market.ETH-USDT.depth.step0',
         ]);
 
         break;
@@ -69,11 +69,10 @@ switch ($action){
     case 3:{
 
         $huobi->subscribe([
-            'market.btcusdt.kline.1min',
-            'market.btcusdt.bbo',
-            'market.btcusdt.trade.detail',
-            'market.btcusdt.detail',
-            'market.btcusdt.etp',
+            'market.BTC-USDT.kline.1min',
+            'market.BTC-USDT.bbo',
+            'market.BTC-USDT.trade.detail',
+            'market.BTC-USDT.detail',
         ]);
 
         break;
@@ -81,11 +80,10 @@ switch ($action){
 
     case 4:{
         $huobi->unsubscribe([
-            'market.btcusdt.kline.1min',
-            'market.btcusdt.bbo',
-            'market.btcusdt.trade.detail',
-            'market.btcusdt.detail',
-            'market.btcusdt.etp',
+            'market.BTC-USDT.kline.1min',
+            'market.BTC-USDT.bbo',
+            'market.BTC-USDT.trade.detail',
+            'market.BTC-USDT.detail',
         ]);
 
         break;
@@ -100,16 +98,18 @@ switch ($action){
             'secret'=>'xxxxxxxxx',
         ]);
         */
-        /*echo $huobi->client()->test3($key_secret[0]).PHP_EOL;
-        die;*/
+
         $huobi->keysecret($key_secret[0]);
         $huobi->subscribe([
-            //'market.btcusdt.kline.1min',
-            //'market.btcusdt.bbo',
+            //public
+            'market.BTC-USDT.depth.step0',
+            'market.ETH-USDT.depth.step0',
 
-            'orders#btcusdt',
-            'trade.clearing#btcusdt#1',
-            'accounts.update#1',
+            //private
+            'orders.EOS-USDT',
+            'accounts.EOS-USDT',
+            'positions.EOS-USDT',
+            'trigger_order.EOS-USDT',
         ]);
 
         break;
@@ -118,24 +118,21 @@ switch ($action){
     //unsubscribe
     case 11:{
         $huobi->keysecret($key_secret[0]);
-        //unSubscribe to all private channels by default
-        $huobi->unsubscribe();
 
-        break;
-    }
+        $huobi->unsubscribe([
+            //public
+            'market.BTC-USDT.depth.step0',
+            'market.ETH-USDT.depth.step0',
 
-    case 12:{
-        $huobi->keysecret($key_secret[0]);
-        //Subscribe to all private channels by default
-        $huobi->subscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            //private
+            'orders.EOS-USDT',
+            'accounts.EOS-USDT',
+            'positions.EOS-USDT',
+            'trigger_order.EOS-USDT',
         ]);
 
         break;
     }
-
-
 
     case 20:{
         //****Three ways to get all data
@@ -143,7 +140,7 @@ switch ($action){
         //The first way
         $data=$huobi->getSubscribes();
         print_r(json_encode($data));
-        die;
+
         //The second way callback
         $huobi->getSubscribes(function($data){
             print_r(json_encode($data));
@@ -162,22 +159,23 @@ switch ($action){
 
         //The first way
         $data=$huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.BTC-USDT.depth.step0',
+            'market.ETH-USDT.depth.step0',
         ]);
+        print_r($data);
 
         //The second way callback
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.BTC-USDT.depth.step0',
+            'market.ETH-USDT.depth.step0',
         ],function($data){
             print_r(json_encode($data));
         });
 
         //The third way is to guard the process
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.BTC-USDT.depth.step0',
+            'market.ETH-USDT.depth.step0',
         ],function($data){
             print_r(json_encode($data));
         },true);
@@ -191,16 +189,30 @@ switch ($action){
         //The first way
         $huobi->keysecret($key_secret[0]);
         $data=$huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            //public
+            'market.BTC-USDT.depth.step0',
+            'market.ETH-USDT.depth.step0',
+
+            //private
+            'orders.EOS-USDT',
+            'accounts.EOS-USDT',
+            'positions.EOS-USDT',
+            'trigger_order.EOS-USDT',
         ]);
         print_r(json_encode($data));
 
         //The second way callback
         $huobi->keysecret($key_secret[0]);
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            //public
+            'market.BTC-USDT.depth.step0',
+            'market.ETH-USDT.depth.step0',
+
+            //private
+            'orders.EOS-USDT',
+            'accounts.EOS-USDT',
+            'positions.EOS-USDT',
+            'trigger_order.EOS-USDT',
         ],function($data){
             print_r(json_encode($data));
         });
@@ -208,8 +220,15 @@ switch ($action){
         //The third way is to guard the process
         $huobi->keysecret($key_secret[0]);
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            //public
+            'market.BTC-USDT.depth.step0',
+            'market.ETH-USDT.depth.step0',
+
+            //private
+            'orders.EOS-USDT',
+            'accounts.EOS-USDT',
+            'positions.EOS-USDT',
+            'trigger_order.EOS-USDT',
         ],function($data){
             print_r(json_encode($data));
         },true);

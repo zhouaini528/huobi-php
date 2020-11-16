@@ -140,6 +140,7 @@ class SocketClient
                 $temp[$table]=$data;
             }
         }else{
+            //die('hh');
             //返回规定的数据
             if(!empty($this->keysecret)) {
                 //是否有私有数据
@@ -147,12 +148,11 @@ class SocketClient
                 if(isset($all_sub[$this->keysecret['key']])) $sub=array_merge($sub,$all_sub[$this->keysecret['key']]);
             }
             foreach ($sub as $k=>$v){
-                $data=$global->get($v);
+                $data=$global->get(strtolower($v));
                 if(empty($data)) continue;
 
                 $temp[$v]=$data;
             }
-
         }
 
         if($callback!==null){
