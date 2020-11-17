@@ -4,6 +4,8 @@ Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huo
 
 所有接口方法的初始化都与huobi提供的方法相同。更多细节 [src/api](https://github.com/zhouaini528/huobi-php/tree/master/src/Api)
 
+支持[Websocket](https://github.com/zhouaini528/huobi-php/blob/master/README_CN.md#Websocket)
+
 大部分的接口已经完成，使用者可以根据我的设计方案继续扩展，欢迎与我一起迭代它。
 
 [English Document](https://github.com/zhouaini528/huobi-php/blob/master/README.md)
@@ -14,11 +16,11 @@ Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huo
 
 [Bitmex](https://github.com/zhouaini528/bitmex-php)
 
-[Okex](https://github.com/zhouaini528/okex-php)
+[Okex](https://github.com/zhouaini528/okex-php) 支持[Websocket](https://github.com/zhouaini528/okex-php/blob/master/README_CN.md#Websocket)
 
-[Huobi](https://github.com/zhouaini528/huobi-php)
+[Huobi](https://github.com/zhouaini528/huobi-php) 支持[Websocket](https://github.com/zhouaini528/huobi-php/blob/master/README_CN.md#Websocket)
 
-[Binance](https://github.com/zhouaini528/binance-php)
+[Binance](https://github.com/zhouaini528/binance-php) 支持[Websocket](https://github.com/zhouaini528/binance-php/blob/master/README_CN.md#Websocket)
 
 [Kucoin](https://github.com/zhouaini528/Kucoin-php)
 
@@ -371,4 +373,223 @@ try {
 [更多用例](https://github.com/zhouaini528/huobi-php/tree/master/tests/swap)
 
 [更多API](https://github.com/zhouaini528/huobi-php/tree/master/src/Api/Swap)
+
+### Websocket
+
+Websocket有两个服务server和client，server负责处理交易所新连接、数据接收、认证登陆等等。client负责获取数据、处理数据。支持现货(spot)、交割合约(future)、永续合约(swap)、USDT永续合约(linear)
+
+#### 现货websocket为例
+
+Server端初始化，必须在cli模式下开启。
+```php
+use \Lin\Huobi\HuobiWebSocket;
+require __DIR__ .'./vendor/autoload.php';
+
+$huobi=new HuobiWebSocket();
+
+$huobi->config([
+    //是否开启日志,默认未开启 false
+    //'log'=>true,
+    //可以设置日志名称，默认开启日志
+    'log'=>['filename'=>'spot'],
+
+    //进程服务端口地址,默认 0.0.0.0:2211
+    //'global'=>'127.0.0.1:2211',
+
+    //频道数据更新时间,默认 0.5 秒
+    //'data_time'=>0.5,
+
+    //设置订阅平台, 默认 'spot'
+    'platform'=>'spot', //参数值为 'spot' 'future' 'swap' 'linear' 'option'
+    //或者也可以这样更灵活的设置
+    'platform'=>[
+        'type'=>'spot',//参数值为 'spot' 'future' 'swap' 'linear' 'option'
+        'market'=>'ws://api.huobi.pro/ws',//行情地址
+        'order'=>'ws://api.huobi.pro/ws/v2',//订单地址
+
+        //'market'=>'ws://api-aws.huobi.pro/ws',
+        //'order'=>'ws://api-aws.huobi.pro/ws/v2',
+    ],
+]);
+
+$huobi->start();
+```
+
+如果你要测试，你可以 php server.php start 可以在终端即时输出日志。
+
+如果你要部署，你可以 php server.php start -d  开启常驻进程模式，并开启'log'=>true 查看日志。
+
+[更多用例请查看](https://github.com/zhouaini528/huobi-php/tree/master/tests/websocket)
+
+
+Client端初始化。
+```php
+$huobi=new HuobiWebSocket();
+
+$huobi->config([
+    //是否开启日志,默认未开启 false
+    //'log'=>true,
+    //可以设置日志名称，默认开启日志
+    'log'=>['filename'=>'spot'],
+
+    //进程服务端口地址,默认 0.0.0.0:2211
+    //'global'=>'127.0.0.1:2211',
+
+    //频道数据更新时间,默认 0.5 秒
+    //'data_time'=>0.5,
+
+    //设置订阅平台, 默认 'spot'
+    'platform'=>'spot', //参数值为 'spot' 'future' 'swap' 'linear' 'option'
+    //或者也可以这样更灵活的设置
+    'platform'=>[
+        'type'=>'spot',//参数值为 'spot' 'future' 'swap' 'linear' 'option'
+        'market'=>'ws://api.huobi.pro/ws',//行情地址
+        'order'=>'ws://api.huobi.pro/ws/v2',//订单地址
+
+        //'market'=>'ws://api-aws.huobi.pro/ws',
+        //'order'=>'ws://api-aws.huobi.pro/ws/v2',
+    ],
+]);
+```
+
+频道订阅
+```php
+//你可以只订阅公共频道
+$huobi->subscribe([
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+]);
+
+//你也可以私人频道与公共频道混合订阅，设置了keysecret默认会订阅私人所有频道
+$huobi->keysecret([
+    'key'=>'xxxxxxxxx',
+    'secret'=>'xxxxxxxxx',
+]);
+$huobi->subscribe([
+    //market
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+
+    //private
+    'orders#btcusdt',
+    'trade.clearing#btcusdt#1',
+    'accounts.update#1',
+]);
+```
+
+频道订阅取消
+```php
+//取消订阅公共频道
+$huobi->unsubscribe([
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+]);
+
+//取消私人频道与公共频道混合订阅，设置了keysecret默认会取消订阅私人所有频道
+$huobi->keysecret([
+    'key'=>'xxxxxxxxx',
+    'secret'=>'xxxxxxxxx',
+]);
+$huobi->unsubscribe([
+    //market
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+
+    //private
+    'orders#btcusdt',
+    'trade.clearing#btcusdt#1',
+    'accounts.update#1',
+]);
+```
+
+获取全部频道订阅数据
+```php
+//第一种方式，直接获取当前最新数据
+$data=$huobi->getSubscribes();
+print_r(json_encode($data));
+
+
+//第二种方式，通过回调函数，获取当前最新数据
+$huobi->getSubscribes(function($data){
+    print_r(json_encode($data));
+});
+
+//第二种方式，通过回调函数并开启常驻进程，获取当前最新数据
+$huobi->getSubscribes(function($data){
+    print_r(json_encode($data));
+},true);
+```
+
+获取部分频道订阅数据
+```php
+//The first way
+$data=$huobi->getSubscribe([
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+]);
+print_r(json_encode($data));
+
+//The second way callback
+$huobi->getSubscribe([
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+],function($data){
+    print_r(json_encode($data));
+});
+
+//The third way is to guard the process
+$huobi->getSubscribe([
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+],function($data){
+    print_r(json_encode($data));
+},true);
+```
+
+获取私有频道订阅数据
+```php
+//The first way
+$huobi->keysecret($key_secret);
+$data=$huobi->getSubscribe();//返回私有频道所有数据
+print_r(json_encode($data));
+
+//The second way callback
+$huobi->keysecret($key_secret);
+$huobi->getSubscribe([//以回调方法返回数据
+    //market
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+
+    //private
+    'orders#btcusdt',
+    'trade.clearing#btcusdt#1',
+    'accounts.update#1',
+],function($data){
+    print_r(json_encode($data));
+});
+
+//The third way is to guard the process
+$huobi->keysecret($key_secret);
+$huobi->getSubscribe([//以开启常驻进程方法获取数据,数据返回频率 $huobi->config['data_time']=0.5s
+    //market
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+
+    //private
+    'orders#btcusdt',
+    'trade.clearing#btcusdt#1',
+    'accounts.update#1',
+],function($data){
+    print_r(json_encode($data));
+},true);
+```
+
+[现货websocket(spot)更多用例](https://github.com/zhouaini528/huobi-php/tree/master/tests/websocket/client_spot.php)
+
+[交割合约websocket(future)更多用例](https://github.com/zhouaini528/huobi-php/tree/master/tests/websocket/client_future.php)
+
+[永续合约websocket(swap)更多用例](https://github.com/zhouaini528/huobi-php/tree/master/tests/websocket/client_swap.php)
+
+[USDT永续合约websocket(linear)更多用例](https://github.com/zhouaini528/huobi-php/tree/master/tests/websocket/client_linear.php)
+
 

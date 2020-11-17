@@ -4,6 +4,8 @@ Huobi docs [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huobiapi.gi
 
 All interface methods are initialized the same as those provided by huobi. See details [src/api](https://github.com/zhouaini528/huobi-php/tree/master/src/Api)
 
+Support [Websocket](https://github.com/zhouaini528/huobi-php/blob/master/README.md#Websocket)
+
 Most of the interface is now complete, and the user can continue to extend it based on my design, working with me to improve it.
 
 [中文文档](https://github.com/zhouaini528/huobi-php/blob/master/README_CN.md)
@@ -14,11 +16,11 @@ Most of the interface is now complete, and the user can continue to extend it ba
 
 [Bitmex](https://github.com/zhouaini528/bitmex-php)
 
-[Okex](https://github.com/zhouaini528/okex-php)
+[Okex](https://github.com/zhouaini528/okex-php) Support [Websocket](https://github.com/zhouaini528/okex-php/blob/master/README.md#Websocket)
 
-[Huobi](https://github.com/zhouaini528/huobi-php)
+[Huobi](https://github.com/zhouaini528/huobi-php) Support [Websocket](https://github.com/zhouaini528/huobi-php/blob/master/README.md#Websocket)
 
-[Binance](https://github.com/zhouaini528/binance-php)
+[Binance](https://github.com/zhouaini528/binance-php) Support [Websocket](https://github.com/zhouaini528/binance-php/blob/master/README.md#Websocket)
 
 [Kucoin](https://github.com/zhouaini528/Kucoin-php)
 
@@ -374,4 +376,229 @@ try {
 [More Test](https://github.com/zhouaini528/huobi-php/tree/master/tests/swap)
 
 [More Api](https://github.com/zhouaini528/huobi-php/tree/master/src/Api/Swap)
+
+### Websocket
+
+Websocket has two services, server and client. The server is responsible for dealing with the new connection of the exchange, data receiving, authentication and login, etc. Client is responsible for obtaining and processing data.Support 'Spot' and 'Futures' and 'Coin Margined' and 'Swap USDT Margined' and 'Swap Option'
+#### Spot Websocket Demo
+
+Server initialization must be started in cli mode.
+```php
+use \Lin\Huobi\HuobiWebSocket;
+require __DIR__ .'./vendor/autoload.php';
+
+$huobi=new HuobiWebSocket();
+
+$huobi->config([
+    //Do you want to enable local logging,default false
+    //'log'=>true,
+    //Or set the log name
+    'log'=>['filename'=>'spot'],
+
+    //Daemons address and port,default 0.0.0.0:2211
+    //'global'=>'127.0.0.1:2211',
+
+    //Channel subscription monitoring time,2 seconds
+    //'listen_time'=>2,
+
+    //Channel data update time,default 0.5 seconds
+    //'data_time'=>0.5,
+
+    //Set up subscription platform, default 'spot'
+    'platform'=>'spot', //options value 'spot' 'future' 'swap' 'linear' 'option'
+    //Or you can set it like this
+    /*
+    'platform'=>[
+        'type'=>'spot',//options value 'spot' 'future' 'swap' 'linear' 'option'
+        'market'=>'ws://api.huobi.pro/ws',//Market Data Request and Subscription
+        'order'=>'ws://api.huobi.pro/ws/v2',//Order Push Subscription
+
+        //'market'=>'ws://api-aws.huobi.pro/ws',
+        //'order'=>'ws://api-aws.huobi.pro/ws/v2',
+    ],
+    */
+]);
+
+$huobi->start();
+```
+
+If you want to test, you can "php server.php start" immediately outputs the log at the terminal.
+
+If you want to deploy, you can "php server.php start -d" enables resident process mode, and enables "log=>true" to view logs.
+
+[More Test](https://github.com/zhouaini528/huobi-php/tree/master/tests/websocket)
+
+Client side initialization.
+```php
+$huobi=new HuobiWebSocket();
+
+$huobi->config([
+    //Do you want to enable local logging,default false
+    //'log'=>true,
+    //Or set the log name
+    'log'=>['filename'=>'spot'],
+
+    //Daemons address and port,default 0.0.0.0:2211
+    //'global'=>'127.0.0.1:2211',
+
+    //Channel subscription monitoring time,2 seconds
+    //'listen_time'=>2,
+
+    //Channel data update time,default 0.5 seconds
+    //'data_time'=>0.5,
+
+    //Set up subscription platform, default 'spot'
+    'platform'=>'spot', //options value 'spot' 'future' 'swap' 'linear' 'option'
+    //Or you can set it like this
+    /*
+    'platform'=>[
+        'type'=>'spot',//options value 'spot' 'future' 'swap' 'linear' 'option'
+        'market'=>'ws://api.huobi.pro/ws',//Market Data Request and Subscription
+        'order'=>'ws://api.huobi.pro/ws/v2',//Order Push Subscription
+
+        //'market'=>'ws://api-aws.huobi.pro/ws',
+        //'order'=>'ws://api-aws.huobi.pro/ws/v2',
+    ],
+    */
+]);
+```
+
+Subscribe
+```php
+//You can only subscribe to public channels
+$huobi->subscribe([
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+]);
+
+//You can also subscribe to both private and public channels.If keysecret() is set, all private channels will be subscribed by default
+$huobi->keysecret([
+    'key'=>'xxxxxxxxx',
+    'secret'=>'xxxxxxxxx',
+]);
+$huobi->subscribe([
+    //market
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+
+    //private
+    'orders#btcusdt',
+    'trade.clearing#btcusdt#1',
+    'accounts.update#1',
+]);
+```
+
+Unsubscribe
+```php
+//Unsubscribe from public channels
+$huobi->unsubscribe([
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+]);
+
+//Unsubscribe from public and private channels.If keysecret() is set, all private channels will be Unsubscribed by default
+$huobi->keysecret([
+    'key'=>'xxxxxxxxx',
+    'secret'=>'xxxxxxxxx',
+]);
+$huobi->unsubscribe([
+    //market
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+
+    //private
+    'orders#btcusdt',
+    'trade.clearing#btcusdt#1',
+    'accounts.update#1',
+]);
+```
+
+Get all channel subscription data
+```php
+//The first way
+$data=$huobi->getSubscribe();
+print_r(json_encode($data));
+
+//The second way callback
+$huobi->getSubscribe(function($data){
+    print_r(json_encode($data));
+});
+
+//The third way is to guard the process
+$huobi->getSubscribe(function($data){
+    print_r(json_encode($data));
+},true);
+```
+
+Get partial channel subscription data
+```php
+//The first way
+$data=$huobi->getSubscribe([
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+]);
+print_r(json_encode($data));
+
+//The second way callback
+$huobi->getSubscribe([
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+],function($data){
+    print_r(json_encode($data));
+});
+
+//The third way is to guard the process
+$huobi->getSubscribe([
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+],function($data){
+    print_r(json_encode($data));
+},true);
+```
+
+Get partial private channel subscription data
+```php
+//The first way
+$huobi->keysecret($key_secret);
+$data=$huobi->getSubscribe();//Return all data of private channel
+print_r(json_encode($data));
+
+//The second way callback
+$huobi->keysecret($key_secret);
+$huobi->getSubscribe([//Return data private and market 
+    //market
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+
+    //private
+    'orders#btcusdt',
+    'trade.clearing#btcusdt#1',
+    'accounts.update#1',
+],function($data){
+    print_r(json_encode($data));
+});
+
+//The third way is to guard the process
+$huobi->keysecret($key_secret);
+$huobi->getSubscribe([//Resident process to get data return frequency $huobi->config['data_time']=0.5s
+    //market
+    'market.btcusdt.depth.step0',
+    'market.bchusdt.depth.step0',
+
+    //private
+    'orders#btcusdt',
+    'trade.clearing#btcusdt#1',
+    'accounts.update#1',
+],function($data){
+    print_r(json_encode($data));
+},true);
+```
+
+[Spot Websocket More Test](https://github.com/zhouaini528/huobi-php/tree/master/tests/websocket/client_spot.php)
+
+[Futures Websocket More Test](https://github.com/zhouaini528/huobi-php/tree/master/tests/websocket/client_future.php)
+
+[Coin Margined Websocket More Test](https://github.com/zhouaini528/huobi-php/tree/master/tests/websocket/client_swap.php)
+
+[Swap USDT Margined Websocket More Test](https://github.com/zhouaini528/huobi-php/tree/master/tests/websocket/client_linear.php)
 
