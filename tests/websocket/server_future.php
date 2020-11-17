@@ -19,25 +19,29 @@ $Huobi->config([
     //Do you want to enable local logging,default false
     //'log'=>true,
     //Or set the log name
-    'log'=>['filename'=>'spot'],
+    'log'=>['filename'=>'future'],
 
     //Daemons address and port,default 0.0.0.0:2211
     //'global'=>'127.0.0.1:2211',
-
-    //Channel subscription monitoring time,2 seconds
-    //'listen_time'=>2,
 
     //Channel data update time,default 0.5 seconds
     //'data_time'=>0.5,
 
     //Set up subscription platform, default 'spot'
     'platform'=>'future', //options value 'spot' 'future' 'swap' 'linear' 'option'
-    //or set
-    /*'platform'=>[
-        'type'=>'spot',
-        'market'=>'wss://api.huobi.pro/ws',
-        'order'=>'wss://api.huobi.pro/ws/v2',
-    ],*/
+    //Or you can set it like this
+    /*
+    'platform'=>[
+        'type'=>'future',
+        'market'=>'ws://api.hbdm.com/ws',//Market Data Request and Subscription
+        'order'=>'ws://api.hbdm.com/notification',//Order Push Subscription
+        'kline'=>'ws://api.hbdm.com/ws_index',//Index Kline Data and Basis Data Subscription
+
+        //'market'=>'ws://api.btcgateway.pro/ws',
+        //'order'=>'ws://api.btcgateway.pro/notification',
+        //'kline'=>'ws://api.btcgateway.pro/ws_index',
+    ],
+    */
 ]);
 
 $Huobi->start();

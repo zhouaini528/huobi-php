@@ -14,7 +14,18 @@ trait SocketFunction
      */
     protected function resub(array $sub=[]){
         $new_sub=[];
-        $temp1=['account','position','order','trade.clearing'];
+
+        $temp1=[
+            'account',
+            'position',
+            'order',
+            'trade.clearing',//spot
+
+            //免加密 但是需要走用户通道
+            'contract_info',
+            'funding_rate'
+        ];
+
         foreach ($sub as $v) {
             $temp2=[$v];
             foreach ($temp1 as $tv){
@@ -26,33 +37,6 @@ trait SocketFunction
         }
 
         return $new_sub;
-    }
-
-    /**
-     * @param $global
-     * @param $tag
-     * @param $data
-     * @param string $keysecret
-     */
-    protected function errorMessage($global,$tag,$data,$keysecret=''){
-        $all_sub=$global->get('all_sub');
-        if(empty($all_sub)) return;
-
-        if($tag=='public') {
-            //查询 message 是否包含了关键词。并把错误信息写入频道记录
-            foreach ($all_sub as $k=>$v){
-                if(is_array($v)) continue;
-                $sub=strtolower($v);
-                if(stristr(strtolower($data['message']),$v)!==false) $global->save($sub,$data);
-            }
-        }else{
-            //如果是用户单独订阅，则该用户所有相关的订阅都显示该错误
-            /*foreach ($all_sub as $k=>$v){
-                if(!is_array($v)) continue;
-                $sub=strtolower($v[0]);
-                $global->add($keysecret['key'].$sub,$data);
-            }*/
-        }
     }
 
     protected function log($message){
@@ -157,9 +141,35 @@ trait SocketFunction
     private function getDecodeData($tag,$data){
         $platform=$this->getPlatform();
 
-        if($tag != 'public' && $platform=='spot') return json_decode($data,true);
+        if($tag != 'market' && $platform=='spot') return json_decode($data,true);
 
         $data=gzdecode($data);
         return json_decode($data,true);
+    }
+
+    /**
+     * @param $sub
+     * @return array
+     */
+    private function channelType($sub){
+        $temp=['market'=>[],'kline'=>[],'private'=>[]];
+        foreach ($sub as $k=>$v){
+            if(count($v)>1) array_push($temp['private'],$v);
+            else {
+                //检测是否是kline 数据通道
+                $kline_data=false;
+                $kline_key=['index','basis','estimated_rate'];
+                foreach ($kline_key as $kv){
+                    if(strpos($v[0], $kv) !== false){
+                        array_push($temp['kline'],$v);
+                        $kline_data=true;
+                    }
+                }
+
+                if(!$kline_data) array_push($temp['market'],$v);
+            }
+        }
+
+        return $temp;
     }
 }

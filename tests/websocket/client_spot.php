@@ -34,12 +34,17 @@ $huobi->config([
 
     //Set up subscription platform, default 'spot'
     'platform'=>'spot', //options value 'spot' 'future' 'swap' 'linear' 'option'
-    //or set
-    /*'platform'=>[
+    //Or you can set it like this
+    /*
+    'platform'=>[
         'type'=>'spot',
-        'market'=>'wss://api.huobi.pro/ws',
-        'order'=>'wss://api.huobi.pro/ws/v2',
-    ],*/
+        'market'=>'ws://api.huobi.pro/ws',//Market Data Request and Subscription
+        'order'=>'ws://api.huobi.pro/ws/v2',//Order Push Subscription
+
+        //'market'=>'ws://api-aws.huobi.pro/ws',
+        //'order'=>'ws://api-aws.huobi.pro/ws/v2',
+    ],
+    */
 ]);
 
 $action=intval($_GET['action'] ?? 0);//http pattern
@@ -100,13 +105,13 @@ switch ($action){
             'secret'=>'xxxxxxxxx',
         ]);
         */
-        /*echo $huobi->client()->test3($key_secret[0]).PHP_EOL;
-        die;*/
         $huobi->keysecret($key_secret[0]);
         $huobi->subscribe([
-            //'market.btcusdt.kline.1min',
-            //'market.btcusdt.bbo',
+            //market
+            'market.btcusdt.depth.step0',
+            'market.bchusdt.depth.step0',
 
+            //private
             'orders#btcusdt',
             'trade.clearing#btcusdt#1',
             'accounts.update#1',
@@ -118,18 +123,16 @@ switch ($action){
     //unsubscribe
     case 11:{
         $huobi->keysecret($key_secret[0]);
-        //unSubscribe to all private channels by default
-        $huobi->unsubscribe();
 
-        break;
-    }
+        $huobi->unsubscribe([
+            //market
+            'market.btcusdt.depth.step0',
+            'market.bchusdt.depth.step0',
 
-    case 12:{
-        $huobi->keysecret($key_secret[0]);
-        //Subscribe to all private channels by default
-        $huobi->subscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            //private
+            'orders#btcusdt',
+            'trade.clearing#btcusdt#1',
+            'accounts.update#1',
         ]);
 
         break;
@@ -224,19 +227,6 @@ switch ($action){
 
     case 10004:{
         $huobi->client()->test2();
-        break;
-    }
-
-    case 10005:{
-        $huobi->keysecret($key_secret[1]);
-        $huobi->subscribe();
-        break;
-    }
-
-    //subscribe
-    case 10006:{
-        $huobi->keysecret($key_secret[0]);
-        $huobi->subscribe();
         break;
     }
 }

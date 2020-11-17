@@ -32,12 +32,17 @@ $Huobi->config([
 
     //Set up subscription platform, default 'spot'
     'platform'=>'spot', //options value 'spot' 'future' 'swap' 'linear' 'option'
-    //or set
-    /*'platform'=>[
+    //Or you can set it like this
+    /*
+    'platform'=>[
         'type'=>'spot',
-        'market'=>'wss://api.huobi.pro/ws',
-        'order'=>'wss://api.huobi.pro/ws/v2',
-    ],*/
+        'market'=>'ws://api.huobi.pro/ws',//Market Data Request and Subscription
+        'order'=>'ws://api.huobi.pro/ws/v2',//Order Push Subscription
+
+        //'market'=>'ws://api-aws.huobi.pro/ws',
+        //'order'=>'ws://api-aws.huobi.pro/ws/v2',
+    ],
+    */
 ]);
 
 $Huobi->start();

@@ -26,20 +26,24 @@ $huobi->config([
     //Daemons address and port,default 0.0.0.0:2211
     //'global'=>'127.0.0.1:2211',
 
-    //Channel subscription monitoring time,2 seconds
-    //'listen_time'=>2,
-
     //Channel data update time,default 0.5 seconds
     //'data_time'=>0.5,
 
     //Set up subscription platform, default 'spot'
     'platform'=>'swap', //options value 'spot' 'future' 'swap' 'linear' 'option'
-    //or set
-    /*'platform'=>[
-        'type'=>'spot',
-        'market'=>'wss://api.huobi.pro/ws',
-        'order'=>'wss://api.huobi.pro/ws/v2',
-    ],*/
+    //Or you can set it like this
+    /*
+    'platform'=>[
+        'type'=>'swap',
+        'market'=>'ws://api.hbdm.com/swap-ws',//Market Data Request and Subscription
+        'order'=>'ws://api.hbdm.com/swap-notification',//Order Push Subscription
+        'kline'=>'ws://api.hbdm.com/ws_index',//Index Kline Data and Basis Data Subscription
+
+        //'market'=>'ws://api.btcgateway.pro/swap-ws',
+        //'order'=>'ws://api.btcgateway.pro/swap-notification',
+        //'kline'=>'ws://api.btcgateway.pro/ws_index',
+    ],
+    */
 ]);
 
 $action=intval($_GET['action'] ?? 0);//http pattern
@@ -50,8 +54,14 @@ switch ($action){
     //subscribe
     case 1:{
         $huobi->subscribe([
+            //market
             'market.BTC-USD.depth.step0',
             'market.ETH-USD.depth.step0',
+
+            //kline index and basis
+            'market.BTC-USD.premium_index.1min',
+            'market.btc-USD.estimated_rate.1min',
+            'market.BTC-USD.basis.1min.open',
         ]);
         break;
     }
@@ -59,8 +69,14 @@ switch ($action){
     //unsubscribe
     case 2:{
         $huobi->unsubscribe([
+            //market
             'market.BTC-USD.depth.step0',
             'market.ETH-USD.depth.step0',
+
+            //kline index and basis
+            'market.BTC-USD.premium_index.1min',
+            'market.btc-USD.estimated_rate.1min',
+            'market.BTC-USD.basis.1min.open',
         ]);
 
         break;
@@ -69,6 +85,7 @@ switch ($action){
     case 3:{
 
         $huobi->subscribe([
+            //market
             'market.BTC-USD.kline.1min',
             'market.BTC-USD.bbo',
             'market.BTC-USD.trade.detail',
@@ -80,6 +97,7 @@ switch ($action){
 
     case 4:{
         $huobi->unsubscribe([
+            //market
             'market.BTC-USD.kline.1min',
             'market.BTC-USD.bbo',
             'market.BTC-USD.trade.detail',
@@ -101,15 +119,24 @@ switch ($action){
 
         $huobi->keysecret($key_secret[0]);
         $huobi->subscribe([
-            //public
+            //market
             'market.BTC-USD.depth.step0',
             'market.ETH-USD.depth.step0',
 
+            //kline index and basis
+            'market.BTC-USD.premium_index.1min',
+            'market.btc-USD.estimated_rate.1min',
+            'market.BTC-USD.basis.1min.open',
+
             //private
-            'orders.EOS-USD',
-            'accounts.EOS-USD',
-            'positions.EOS-USD',
-            'trigger_order.EOS-USD',
+            'orders.eos-usd',
+            'accounts.eos-usd',
+            'positions.eos-usd',
+            'trigger_order.eos-usd',
+
+            'public.btc-usd.liquidation_orders',
+            'public.btc-usd.contract_info',
+            'public.btc-usd.funding_rate',
         ]);
 
         break;
@@ -120,15 +147,24 @@ switch ($action){
         $huobi->keysecret($key_secret[0]);
 
         $huobi->unsubscribe([
-            //public
+            //market
             'market.BTC-USD.depth.step0',
             'market.ETH-USD.depth.step0',
 
+            //kline index and basis
+            'market.BTC-USD.premium_index.1min',
+            'market.btc-USD.estimated_rate.1min',
+            'market.BTC-USD.basis.1min.open',
+
             //private
-            'orders.EOS-USD',
-            'accounts.EOS-USD',
-            'positions.EOS-USD',
-            'trigger_order.EOS-USD',
+            'orders.eos-usd',
+            'accounts.eos-usd',
+            'positions.eos-usd',
+            'trigger_order.eos-usd',
+
+            'public.btc-usd.liquidation_orders',
+            'public.btc-usd.contract_info',
+            'public.btc-usd.funding_rate',
         ]);
 
         break;
@@ -140,7 +176,7 @@ switch ($action){
         //The first way
         $data=$huobi->getSubscribes();
         print_r(json_encode($data));
-
+        die;
         //The second way callback
         $huobi->getSubscribes(function($data){
             print_r(json_encode($data));
@@ -189,30 +225,26 @@ switch ($action){
         //The first way
         $huobi->keysecret($key_secret[0]);
         $data=$huobi->getSubscribe([
-            //public
             'market.BTC-USD.depth.step0',
-            'market.ETH-USD.depth.step0',
+            //'market.ETH-USD.depth.step0',
 
-            //private
-            'orders.EOS-USD',
-            'accounts.EOS-USD',
-            'positions.EOS-USD',
-            'trigger_order.EOS-USD',
+            'orders.eos',
+            'accounts.eos',
+            'positions.eos',
+            //'trigger_order.eos',
         ]);
         print_r(json_encode($data));
 
         //The second way callback
         $huobi->keysecret($key_secret[0]);
         $huobi->getSubscribe([
-            //public
             'market.BTC-USD.depth.step0',
-            'market.ETH-USD.depth.step0',
+            //'market.ETH-USD.depth.step0',
 
-            //private
-            'orders.EOS-USD',
-            'accounts.EOS-USD',
-            'positions.EOS-USD',
-            'trigger_order.EOS-USD',
+            'orders.eos',
+            'accounts.eos',
+            'positions.eos',
+            //'trigger_order.eos',
         ],function($data){
             print_r(json_encode($data));
         });
@@ -220,15 +252,13 @@ switch ($action){
         //The third way is to guard the process
         $huobi->keysecret($key_secret[0]);
         $huobi->getSubscribe([
-            //public
             'market.BTC-USD.depth.step0',
-            'market.ETH-USD.depth.step0',
+            //'market.ETH-USD.depth.step0',
 
-            //private
-            'orders.EOS-USD',
-            'accounts.EOS-USD',
-            'positions.EOS-USD',
-            'trigger_order.EOS-USD',
+            'orders.eos',
+            'accounts.eos',
+            'positions.eos',
+            //'trigger_order.eos',
         ],function($data){
             print_r(json_encode($data));
         },true);

@@ -23,8 +23,7 @@ class SocketServer
     private $connectionIndex=0;
     private $config=[];
 
-    private $market_url;
-    private $order_url;
+    private $public_url=['market','kline'];
 
     function __construct(array $config=[])
     {
@@ -36,7 +35,12 @@ class SocketServer
         $this->server();
 
         $this->worker->onWorkerStart = function() {
-            $this->addConnection('public');
+            $this->addConnection('market');
+            //$this->addConnection('order');
+
+            if(in_array($this->getPlatform(),['future','swap','linear'])) $this->addConnection('kline');
+
+            //$this->addConnection('system');
         };
 
         Worker::runAll();
@@ -46,48 +50,53 @@ class SocketServer
         $this->newConnection()($tag,$keysecret);
     }
 
-    private function getBaseUrl($global,$keysecret){
+    private function getBaseUrl($tag,$keysecret){
         if(is_array($this->config['platform'])){
-            if(empty($keysecret)) return $this->config['platform']['market'];
-
-            return $this->config['platform']['order'];
+            if(!empty($keysecret)) return $this->config['platform']['order'];
+            return $this->config['platform'][$tag];
         }
 
         switch ($this->config['platform']){
             case 'option':{
-                if(empty($keysecret)) return $this->market_url='ws://api.hbdm.com/option-ws';
-                return $this->order_url='ws://api.hbdm.com/option-notification';
+                if($tag=='market') return 'ws://api.hbdm.com/option-ws';;
+                if(!empty($keysecret)) return 'ws://api.hbdm.com/option-notification';
             }
             case 'linear':{
-                if(empty($keysecret)) return $this->market_url='ws://api.hbdm.com/linear-swap-ws';
-                return $this->order_url='ws://api.hbdm.com/linear-swap-notification';
+                if($tag=='market') return 'ws://api.hbdm.com/linear-swap-ws';
+                if(!empty($keysecret)) return 'ws://api.hbdm.com/linear-swap-notification';
             }
             case 'swap':{
-                if(empty($keysecret)) return $this->market_url='ws://api.hbdm.com/swap-ws';
-                return $this->order_url='ws://api.hbdm.com/swap-notification';
+                if($tag=='market') return 'ws://api.hbdm.com/swap-ws';
+                if(!empty($keysecret)) return 'ws://api.hbdm.com/swap-notification';
             }
             case 'future':{
-                if(empty($keysecret)) return $this->market_url='ws://api.hbdm.com/ws';
-                return $this->order_url='ws://api.hbdm.com/notification';
+                if($tag=='market') return 'ws://api.hbdm.com/ws';
+                if(!empty($keysecret)) return 'ws://api.hbdm.com/notification';
             }
             default:{//spot
-                if(empty($keysecret)) return $this->market_url='ws://api.huobi.pro/ws';
-                return $this->order_url='ws://api.huobi.pro/ws/v2';
+                if($tag=='market') return 'ws://api.huobi.pro/ws';
+                if(!empty($keysecret)) return 'ws://api.huobi.pro/ws/v2';
             }
         }
+
+        if($tag=='kline') return 'ws://api.hbdm.com/ws_index';
+        //if($tag=='system ') return 'ws://api.hbdm.com/center-notification';
     }
 
     private function newConnection(){
         return function($tag,$keysecret){
             $global=$this->client();
 
-            $baseurl=$this->getBaseUrl($global,$keysecret);
+            $baseurl=$this->getBaseUrl($tag,$keysecret);
 
             $this->connection[$this->connectionIndex] = new AsyncTcpConnection($baseurl);
             $this->connection[$this->connectionIndex]->transport = 'ssl';
 
+            $this->log('Connection '.$baseurl);
+
             //自定义属性
             $this->connection[$this->connectionIndex]->tag=$tag;//标记公共连接还是私有连接
+            $this->connection[$this->connectionIndex]->tag_baseurl=$baseurl;
             if(!empty($keysecret)) $this->connection[$this->connectionIndex]->tag_keysecret=$keysecret;//标记私有连接
 
             $this->connection[$this->connectionIndex]->onConnect=$this->onConnect($keysecret);
@@ -116,7 +125,7 @@ class SocketServer
                     $data=[
                         "action"=>"req",
                         "ch"=>"auth",
-                        'params'=>$this->auth($this->order_url,$keysecret),
+                        'params'=>$this->auth($con->tag_baseurl,$keysecret),
                     ];
 
                     $con->send(json_encode($data));
@@ -130,7 +139,7 @@ class SocketServer
                         "op"=>"auth",
                         "type"=>"api",
                     ];
-                    $data=array_merge($data,$this->auth($this->order_url,$keysecret));
+                    $data=array_merge($data,$this->auth($con->tag_baseurl,$keysecret));
 
                     $con->send(json_encode($data));
 
@@ -174,7 +183,7 @@ class SocketServer
             }
 
             //spot order auth login
-            if(isset($data['ch']) && $data['ch']!='auth' && $data['code']=='200') {
+            if(isset($data['ch']) && $data['ch']=='auth' && $data['code']=='200') {
                 $this->keysecretInit($con->tag_keysecret,[
                     'connection'=>1,
                     'auth'=>1,
@@ -206,7 +215,7 @@ class SocketServer
 
             if(isset($data['topic'])) {
                 $table=strtolower($data['topic']);
-                if($con->tag != 'public') $table=$this->userKey($con->tag_keysecret,$table);
+                if(!in_array($con->tag,$this->public_url)) $table=$this->userKey($con->tag_keysecret,$table);
                 $global->save($table,$data);
                 return;
             }
@@ -218,9 +227,9 @@ class SocketServer
     private function onClose(){
         return function($con){
             //这里连接失败 会轮询 connect
-            if($con->tag=='public') {
+            if(in_array($con->tag,$this->public_url)) {
                 //TODO如果连接失败  应该public  private 都行重新加载
-                $this->log('reconnection');
+                $this->log($con->tag.' reconnection');
                 $con->reConnect(5);
             }else{
                 $this->log('connection close '.$con->tag_keysecret['key']);
@@ -265,15 +274,10 @@ class SocketServer
             return;
         }
 
-        //是否有私有订阅
-        $temp=['public'=>[],'private'=>[]];
-        foreach ($sub as $k=>$v){
-            if(count($v)>1) array_push($temp['private'],$v);
-            else array_push($temp['public'],$v);
-        }
+        $temp=$this->channelType($sub);
 
-        if($con->tag=='public' && !empty($temp['public'])){
-            foreach ($temp['public'] as $v){
+        if($con->tag=='market' && !empty($temp['market'])){
+            foreach ($temp['market'] as $v){
                 $data=[
                     "sub"=>current($v),
                     'id'=>$this->getId()
@@ -283,14 +287,32 @@ class SocketServer
                 $con->send($data);
 
                 $this->log($data);
-                $this->log('public subscribe send');
+                $this->log($con->tag.' subscribe send');
             }
 
-            $global->addSubUpdate($temp['public']);
-            $global->allSubUpdate($temp['public'],'add');
+            $global->addSubUpdate($temp['market']);
+            $global->allSubUpdate($temp['market'],'add');
         }
 
-        if($con->tag!='public' && !empty($temp['private'])){
+        if($con->tag=='kline' && !empty($temp['kline'])){
+            foreach ($temp['kline'] as $v){
+                $data=[
+                    "sub"=>current($v),
+                    'id'=>$this->getId()
+                ];
+
+                $data=json_encode($data);
+                $con->send($data);
+
+                $this->log($data);
+                $this->log($con->tag.' subscribe send');
+            }
+
+            $global->addSubUpdate($temp['kline']);
+            $global->allSubUpdate($temp['kline'],'add');
+        }
+
+        if($con->tag!='market' && !empty($temp['private'])){
             //判断是否鉴权登录
             $keysecret=$global->get('keysecret');
 
@@ -334,15 +356,10 @@ class SocketServer
             return;
         }
 
-        //是否有私有订阅
-        $temp=['public'=>[],'private'=>[]];
-        foreach ($unsub as $k=>$v){
-            if(count($v)>1) array_push($temp['private'],$v);
-            else array_push($temp['public'],$v);
-        }
+        $temp=$this->channelType($unsub);
 
-        if($con->tag=='public' && !empty($temp['public'])){
-            foreach ($temp['public'] as $v){
+        if($con->tag=='market' && !empty($temp['market'])){
+            foreach ($temp['market'] as $v){
                 $data=[
                     "unsub"=>current($v),
                     'id'=>$this->getId()
@@ -352,17 +369,32 @@ class SocketServer
                 $con->send($data);
 
                 $this->log($data);
-                $this->log('public unsubscribe send');
+                $this->log($con->tag.' unsubscribe send');
             }
 
-            //*******订阅成功后，删除del_sub  public 值
-            $global->delSubUpdate($temp['public']);
-
-            //*******订阅成功后 更改 all_sub  public 值
-            $global->allSubUpdate($temp['public'],'del');
+            $global->delSubUpdate($temp['market']);
+            $global->allSubUpdate($temp['market'],'del');
         }
 
-        if($con->tag!='public' && !empty($temp['private'])){
+        if($con->tag=='kline' && !empty($temp['kline'])){
+            foreach ($temp['kline'] as $v){
+                $data=[
+                    "unsub"=>current($v),
+                    'id'=>$this->getId()
+                ];
+
+                $data=json_encode($data);
+                $con->send($data);
+
+                $this->log($data);
+                $this->log($con->tag.' unsubscribe send');
+            }
+
+            $global->delSubUpdate($temp['kline']);
+            $global->allSubUpdate($temp['kline'],'del');
+        }
+
+        if($con->tag!='market' && !empty($temp['private'])){
             $temp_sub=[];
             foreach ($temp['private'] as $v){
                 if($this->getPlatform()=='spot'){
@@ -401,7 +433,7 @@ class SocketServer
 
         foreach ($keysecret as $k=>$v){
             //是否取消连接
-            if($con->tag!='public' && isset($v['connection_close']) && $v['connection_close']==1){
+            if($con->tag!='market' && isset($v['connection_close']) && $v['connection_close']==1){
                 $con->close();
 
                 $this->keysecretInit($v,[]);
