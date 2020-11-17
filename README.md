@@ -407,7 +407,6 @@ $huobi->config([
     //Set up subscription platform, default 'spot'
     'platform'=>'spot', //options value 'spot' 'future' 'swap' 'linear' 'option'
     //Or you can set it like this
-    /*
     'platform'=>[
         'type'=>'spot',//options value 'spot' 'future' 'swap' 'linear' 'option'
         'market'=>'ws://api.huobi.pro/ws',//Market Data Request and Subscription
@@ -416,7 +415,6 @@ $huobi->config([
         //'market'=>'ws://api-aws.huobi.pro/ws',
         //'order'=>'ws://api-aws.huobi.pro/ws/v2',
     ],
-    */
 ]);
 
 $huobi->start();
@@ -450,7 +448,6 @@ $huobi->config([
     //Set up subscription platform, default 'spot'
     'platform'=>'spot', //options value 'spot' 'future' 'swap' 'linear' 'option'
     //Or you can set it like this
-    /*
     'platform'=>[
         'type'=>'spot',//options value 'spot' 'future' 'swap' 'linear' 'option'
         'market'=>'ws://api.huobi.pro/ws',//Market Data Request and Subscription
@@ -459,7 +456,6 @@ $huobi->config([
         //'market'=>'ws://api-aws.huobi.pro/ws',
         //'order'=>'ws://api-aws.huobi.pro/ws/v2',
     ],
-    */
 ]);
 ```
 
