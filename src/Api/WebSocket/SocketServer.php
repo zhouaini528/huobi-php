@@ -165,10 +165,18 @@ class SocketServer
                 return;
             }
 
-            //pulibc market
+            //market kline
             if(isset($data['ch']) && $data['ch']!='auth') {
                 $table=strtolower($data['ch']);
-                $global->save($table,$data);
+
+                //私有数据存入队列
+                if(!in_array($con->tag,$this->public_url)) {
+                    $table=$this->userKey($con->tag_keysecret,$table);
+                    $global->saveQueue($table,$data);
+                }else{
+                    $global->save($table,$data);
+                }
+
                 return;
             }
 
@@ -215,8 +223,13 @@ class SocketServer
 
             if(isset($data['topic'])) {
                 $table=strtolower($data['topic']);
-                if(!in_array($con->tag,$this->public_url)) $table=$this->userKey($con->tag_keysecret,$table);
-                $global->saveQueue($table,$data);
+                if(!in_array($con->tag,$this->public_url)) {
+                    $table=$this->userKey($con->tag_keysecret,$table);
+                    $global->saveQueue($table,$data);
+                }else{
+                    $global->save($table,$data);
+                }
+
                 return;
             }
 

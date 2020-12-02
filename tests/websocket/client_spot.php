@@ -144,6 +144,7 @@ switch ($action){
         //****Three ways to get all data
 
         //The first way
+        $huobi->keysecret($key_secret[0]);
         $data=$huobi->getSubscribes();
         print_r(json_encode($data));
         die;

@@ -132,24 +132,34 @@ class SocketClient
         //默认返回所有数据
         if(empty($sub)){
             foreach ($all_sub as $k=>$v){
-                if(is_array($v)) $table=$k;
-                else $table=$v;
+                if(is_array($v)){
+                    if(empty($this->keysecret) || $this->keysecret['key']!=$k) continue;
 
-                $data=$global->get(strtolower($table));
-                if(empty($data)) continue;
-                $temp[$table]=$data;
+                    foreach ($v as $vv){
+                        $data=$global->getQueue(strtolower($vv));
+                        $temp[strtolower($vv)]=$data;
+                    }
+                }else{
+                    $data=$global->get(strtolower($v));
+                    $temp[strtolower($v)]=$data;
+                }
             }
         }else{
-            //die('hh');
             //返回规定的数据
             if(!empty($this->keysecret)) {
                 //是否有私有数据
                 if(isset($all_sub[$this->keysecret['key']])) $sub=array_merge($sub,$all_sub[$this->keysecret['key']]);
             }
 
+            //现货 maket数据key 无法对应。默认返回全部maket？？
+            if($this->getPlatform()=='spot'){
+
+            }
+
+            //print_r($sub);
             foreach ($sub as $k=>$v){
                 //判断私有数据是否需要走队列数据
-                $temp_v=explode('=',$v);
+                $temp_v=explode(self::$USER_DELIMITER,$v);
                 if(count($temp_v)>1){
                     //private
                     $data=$global->getQueue(strtolower($v));
@@ -157,6 +167,7 @@ class SocketClient
                     //public
                     $data=$global->get(strtolower($v));
                 }
+
                 if(empty($data)) continue;
 
                 $temp[$v]=$data;

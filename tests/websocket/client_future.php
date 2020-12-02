@@ -215,7 +215,7 @@ switch ($action){
         //****Three ways return to the specified channel data,All private data is also returned by default
 
         //The first way
-        $huobi->keysecret($key_secret[0]);
+        /*$huobi->keysecret($key_secret[0]);
         $data=$huobi->getSubscribe([
             'market.BTC_CQ.depth.step0',
             //'market.ETH_CQ.depth.step0',
@@ -226,7 +226,7 @@ switch ($action){
             //'trigger_order.eos',
         ]);
         print_r(json_encode($data));
-
+        //die;
         //The second way callback
         $huobi->keysecret($key_secret[0]);
         $huobi->getSubscribe([
@@ -239,12 +239,12 @@ switch ($action){
             //'trigger_order.eos',
         ],function($data){
             print_r(json_encode($data));
-        });
+        });*/
 
         //The third way is to guard the process
         $huobi->keysecret($key_secret[0]);
         $huobi->getSubscribe([
-            'market.BTC_CQ.depth.step0',
+            //'market.BTC_CQ.depth.step0',
             //'market.ETH_CQ.depth.step0',
 
             'orders.eos',
