@@ -152,9 +152,9 @@ class SocketClient
             }
 
             //现货 maket数据key 无法对应。默认返回全部maket？？
-            if($this->getPlatform()=='spot'){
+            /*if($this->getPlatform()=='spot'){
 
-            }
+            }*/
 
             //print_r($sub);
             foreach ($sub as $k=>$v){

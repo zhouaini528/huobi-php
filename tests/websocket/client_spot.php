@@ -166,22 +166,22 @@ switch ($action){
 
         //The first way
         $data=$huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.btcusdt.depth.step0',
+            'market.bchusdt.depth.step0',
         ]);
 
         //The second way callback
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.btcusdt.depth.step0',
+            'market.bchusdt.depth.step0',
         ],function($data){
             print_r(json_encode($data));
         });
 
         //The third way is to guard the process
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.btcusdt.depth.step0',
+            'market.bchusdt.depth.step0',
         ],function($data){
             print_r(json_encode($data));
         },true);
@@ -195,16 +195,16 @@ switch ($action){
         //The first way
         $huobi->keysecret($key_secret[0]);
         $data=$huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.btcusdt.depth.step0',
+            'market.bchusdt.depth.step0',
         ]);
         print_r(json_encode($data));
 
         //The second way callback
         $huobi->keysecret($key_secret[0]);
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.btcusdt.depth.step0',
+            'market.bchusdt.depth.step0',
         ],function($data){
             print_r(json_encode($data));
         });
@@ -212,8 +212,8 @@ switch ($action){
         //The third way is to guard the process
         $huobi->keysecret($key_secret[0]);
         $huobi->getSubscribe([
-            'btcusdt@depth',
-            'bchusdt@depth',
+            'market.btcusdt.depth.step0',
+            'market.bchusdt.depth.step0',
         ],function($data){
             print_r(json_encode($data));
         },true);
