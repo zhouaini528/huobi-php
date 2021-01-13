@@ -246,7 +246,7 @@ class SocketServer
 
                 $this->reconnection($global,'public');
 
-                $con->reConnect(20);
+                $con->reConnect(10);
             }else{
                 $this->log('connection close '.$con->tag_keysecret['key']);
 
