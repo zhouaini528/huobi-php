@@ -399,6 +399,9 @@ $huobi->config([
     //频道数据更新时间,默认 0.5 秒
     //'data_time'=>0.5,
 
+    //私有数据队列默认保存100条
+    //'queue_count'=>100,
+
     //设置订阅平台, 默认 'spot'
     'platform'=>'spot', //参数值为 'spot' 'future' 'swap' 'linear' 'option'
     //或者也可以这样更灵活的设置
@@ -437,6 +440,9 @@ $huobi->config([
 
     //频道数据更新时间,默认 0.5 秒
     //'data_time'=>0.5,
+
+    //私有数据队列默认保存100条
+    //'queue_count'=>100,
 
     //设置订阅平台, 默认 'spot'
     'platform'=>'spot', //参数值为 'spot' 'future' 'swap' 'linear' 'option'

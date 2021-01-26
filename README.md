@@ -404,6 +404,9 @@ $huobi->config([
     //Channel data update time,default 0.5 seconds
     //'data_time'=>0.5,
 
+    //Number of messages WS queue shuold hold, default 100
+    //'queue_count'=>100,
+
     //Set up subscription platform, default 'spot'
     'platform'=>'spot', //options value 'spot' 'future' 'swap' 'linear' 'option'
     //Or you can set it like this
@@ -444,6 +447,9 @@ $huobi->config([
 
     //Channel data update time,default 0.5 seconds
     //'data_time'=>0.5,
+
+    //Number of messages WS queue shuold hold, default 100
+    //'queue_count'=>100,
 
     //Set up subscription platform, default 'spot'
     'platform'=>'spot', //options value 'spot' 'future' 'swap' 'linear' 'option'

@@ -269,15 +269,7 @@ switch ($action){
     }
 
     case 10005:{
-        $huobi->keysecret($key_secret[1]);
-        $huobi->subscribe();
-        break;
-    }
-
-    //subscribe
-    case 10006:{
-        $huobi->keysecret($key_secret[0]);
-        $huobi->subscribe();
+        $huobi->client()->test_reconnection();
         break;
     }
 }
