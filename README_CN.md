@@ -10,6 +10,8 @@ Huobi 文档地址 [https://huobiapi.github.io/docs/spot/v1/cn/#api](https://huo
 
 [English Document](https://github.com/zhouaini528/huobi-php/blob/master/README.md)
 
+QQ交流群：668421169
+
 ### 其他交易所API
 
 [Exchanges](https://github.com/zhouaini528/exchanges-php) 它包含以下所有交易所，强烈推荐使用该SDK。
