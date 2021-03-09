@@ -67,6 +67,8 @@ class Request
      * 签名
      * */
     protected function signature(){
+        if(empty($this->key)) return;
+
         $param = [
             'AccessKeyId' => $this->key,
             'SignatureMethod' => 'HmacSHA256',
@@ -141,6 +143,10 @@ class Request
 
         if(!empty($this->data)) {
             $this->options['body']=json_encode($this->data);
+        }
+
+        if($this->type=='GET' && empty($this->key)){
+            $this->signature = empty($this->data) ? '' : http_build_query($this->data);
         }
 
         $response = $client->request($this->type, $this->host.$this->path.'?'.$this->signature, $this->options);
