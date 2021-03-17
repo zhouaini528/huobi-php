@@ -12,6 +12,26 @@ use Lin\Huobi\Request;
 class Subuser extends Request
 {
     /**
+     *POST /v2/sub-user/deduct-mode
+     * */
+    public function postDeductMode(array $data=[]){
+        $this->type='POST';
+        $this->path='/v2/sub-user/deduct-mode';
+        $this->data=$data;
+        return $this->exec();
+    }
+
+    /**
+     *
+     * */
+    public function post(array $data=[]){
+        $this->type='POST';
+        $this->path='';
+        $this->data=$data;
+        return $this->exec();
+    }
+
+    /**
      *POST /v2/sub-user/creation
      * */
     public function postCreation(array $data=[]){
@@ -20,7 +40,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET /v2/sub-user/user-list
      * */
@@ -30,7 +50,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST /v2/sub-user/management
      * */
@@ -40,7 +60,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET /v2/sub-user/user-state
      * */
@@ -50,7 +70,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST /v2/sub-user/tradable-market
      * */
@@ -60,7 +80,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST /v2/sub-user/transferability
      * */
@@ -70,7 +90,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET /v2/sub-user/account-list
      * */
@@ -80,7 +100,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST /v2/sub-user/api-key-generation
      * */
@@ -90,7 +110,17 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
+    /**
+     *GET /v2/user/uid
+     * */
+    public function getUid(array $data=[]){
+        $this->type='GET';
+        $this->path='/v2/user/uid';
+        $this->data=$data;
+        return $this->exec();
+    }
+
     /**
      *GET /v2/user/api-key
      * */
@@ -100,7 +130,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST /v2/sub-user/api-key-modification
      * */
@@ -110,7 +140,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST /v2/sub-user/api-key-deletion
      * */
@@ -120,7 +150,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST /v1/subuser/transfer
      * */
@@ -130,7 +160,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET /v2/sub-user/deposit-address
      * */
@@ -140,7 +170,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET /v2/sub-user/query-deposit
      * */
@@ -150,7 +180,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET /v1/subuser/aggregate-balance
      * */
@@ -160,7 +190,7 @@ class Subuser extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET /v1/account/accounts/{sub-uid}
      * */
