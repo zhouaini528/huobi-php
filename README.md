@@ -392,7 +392,7 @@ try {
 Websocket has two services, server and client. The server is responsible for dealing with the new connection of the exchange, data receiving, authentication and login. Client is responsible for obtaining and processing data.Support 'Spot' and 'Futures' and 'Coin Margined' and 'Swap USDT Margined' and 'Swap Option'
 #### Spot Websocket Demo
 
-Server initialization must be started in cli mode.
+Server initialization must be started in Linux CLI mode.
 ```php
 use \Lin\Huobi\HuobiWebSocket;
 require __DIR__ .'./vendor/autoload.php';
