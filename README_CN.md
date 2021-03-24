@@ -390,6 +390,8 @@ try {
 
 Websocket有两个服务server和client，server负责处理交易所新连接、数据接收、认证登陆等等。client负责获取数据、处理数据。支持现货(spot)、交割合约(future)、永续合约(swap)、USDT永续合约(linear)
 
+[Websocket行情应用举例](https://github.com/zhouaini528/websocket-market)
+
 #### 现货websocket为例
 
 Server端初始化，必须在cli模式下开启。
