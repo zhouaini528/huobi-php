@@ -235,6 +235,11 @@ switch ($action){
         $huobi->client()->test_reconnection();
         break;
     }
+
+    case 10006:{
+        $huobi->client()->test_reconnection2();
+        break;
+    }
 }
 
 

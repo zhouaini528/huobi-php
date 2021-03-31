@@ -205,4 +205,8 @@ class SocketClient
             'public'=>['market'=>'close','kline'=>'close'],
         ];
     }
+
+    function test_reconnection2(){
+        $this->client->debug2=1;
+    }
 }

@@ -36,11 +36,8 @@ class SocketServer
 
         $this->worker->onWorkerStart = function() {
             $this->addConnection('market');
-            //$this->addConnection('order');
 
             if(in_array($this->getPlatform(),['future','swap','linear'])) $this->addConnection('kline');
-
-            //$this->addConnection('system');
         };
 
         Worker::runAll();
@@ -97,6 +94,7 @@ class SocketServer
             //自定义属性
             $this->connection[$this->connectionIndex]->tag=$tag;//标记公共连接还是私有连接
             $this->connection[$this->connectionIndex]->tag_baseurl=$baseurl;
+            $this->connection[$this->connectionIndex]->tag_reconnection_num=0;//标记当前已重连次数
             if(!empty($keysecret)) $this->connection[$this->connectionIndex]->tag_keysecret=$keysecret;//标记私有连接
 
             $this->connection[$this->connectionIndex]->onConnect=$this->onConnect($keysecret);
@@ -177,6 +175,10 @@ class SocketServer
                     $global->save($table,$data);
                 }
 
+                //最后数据更新时间
+                $con->tag_data_time=time();
+                //成功接收数据重连次数回归0
+                $con->tag_reconnection_num=0;
                 return;
             }
 
@@ -230,6 +232,10 @@ class SocketServer
                     $global->save($table,$data);
                 }
 
+                //最后数据更新时间
+                $con->tag_data_time=time();
+                //成功接收数据重连次数回归0
+                $con->tag_reconnection_num=0;
                 return;
             }
 
@@ -278,6 +284,25 @@ class SocketServer
             $this->debug($con,$global);
 
             $this->log('listen '.$con->tag);
+
+            /*if(isset($con->tag_data_time)){
+                echo time()-$con->tag_data_time;
+                echo PHP_EOL;
+            }*/
+
+            //公共数据如果60秒内无数据更新，则断开连接重新订阅，重试次数不超过5次
+            if(isset($con->tag_data_time) && time()-$con->tag_data_time>10*($con->tag_reconnection_num+1) && $con->tag_reconnection_num<=5){
+                if(in_array($con->tag,$this->public_url)) {
+                    //public
+                    $con->close();
+                }else{
+                    //private
+                }
+
+                $con->tag_reconnection_num++;
+
+                $this->log('listen '.$con->tag.' reconnection_num:'.$con->tag_reconnection_num.' tag_data_time:'.$con->tag_data_time);
+            }
         });
     }
 
