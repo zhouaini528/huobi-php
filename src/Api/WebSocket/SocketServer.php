@@ -291,7 +291,7 @@ class SocketServer
             }*/
 
             //公共数据如果60秒内无数据更新，则断开连接重新订阅，重试次数不超过5次
-            if(isset($con->tag_data_time) && time()-$con->tag_data_time>10*($con->tag_reconnection_num+1) && $con->tag_reconnection_num<=5){
+            if(isset($con->tag_data_time) && time()-$con->tag_data_time>60*($con->tag_reconnection_num+1) && $con->tag_reconnection_num<=5){
                 if(in_array($con->tag,$this->public_url)) {
                     //public
                     $con->close();
