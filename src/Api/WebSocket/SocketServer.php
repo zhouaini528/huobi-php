@@ -173,12 +173,12 @@ class SocketServer
                     $global->saveQueue($table,$data);
                 }else{
                     $global->save($table,$data);
-                }
 
-                //最后数据更新时间
-                $con->tag_data_time=time();
-                //成功接收数据重连次数回归0
-                $con->tag_reconnection_num=0;
+                    //最后数据更新时间
+                    $con->tag_data_time=time();
+                    //成功接收数据重连次数回归0
+                    $con->tag_reconnection_num=0;
+                }
                 return;
             }
 
@@ -230,12 +230,12 @@ class SocketServer
                     $global->saveQueue($table,$data);
                 }else{
                     $global->save($table,$data);
-                }
 
-                //最后数据更新时间
-                $con->tag_data_time=time();
-                //成功接收数据重连次数回归0
-                $con->tag_reconnection_num=0;
+                    //最后数据更新时间
+                    $con->tag_data_time=time();
+                    //成功接收数据重连次数回归0
+                    $con->tag_reconnection_num=0;
+                }
                 return;
             }
 
@@ -251,13 +251,21 @@ class SocketServer
                 $this->log($con->tag.' reconnection');
 
                 $this->reconnection($global,'public');
-
-                $con->reConnect(10);
             }else{
-                $this->log('connection close '.$con->tag_keysecret['key']);
+                $this->log('private connection close '.$con->tag_keysecret['key']);
 
-                Timer::del($con->timer_other);
+                //更改为掉线状态
+                $this->keysecretInit($con->tag_keysecret,[
+                    'connection'=>2,
+                    'connection_close'=>0,
+                    'auth'=>0,
+                ]);
+
+                //重新订阅私有频道
+                $this->reconnection($global,'private',$con->tag_keysecret);
             }
+
+            $con->reConnect(10);
         };
     }
 
@@ -285,23 +293,18 @@ class SocketServer
 
             $this->log('listen '.$con->tag);
 
-            /*if(isset($con->tag_data_time)){
-                echo time()-$con->tag_data_time;
-                echo PHP_EOL;
-            }*/
-
             //公共数据如果60秒内无数据更新，则断开连接重新订阅，重试次数不超过10次
-            if(isset($con->tag_data_time) && time()-$con->tag_data_time>60*($con->tag_reconnection_num+1) && $con->tag_reconnection_num<=10){
-                if(in_array($con->tag,$this->public_url)) {
-                    //public
+            if(in_array($con->tag,$this->public_url)) {
+                //public
+                if (isset($con->tag_data_time) && time() - $con->tag_data_time > 60 * ($con->tag_reconnection_num + 1) && $con->tag_reconnection_num <= 10) {
                     $con->close();
-                }else{
-                    //private
+
+                    $con->tag_reconnection_num++;
+
+                    $this->log('listen ' . $con->tag . ' reconnection_num:' . $con->tag_reconnection_num . ' tag_data_time:' . $con->tag_data_time);
                 }
-
-                $con->tag_reconnection_num++;
-
-                $this->log('listen '.$con->tag.' reconnection_num:'.$con->tag_reconnection_num.' tag_data_time:'.$con->tag_data_time);
+            }else{
+                //private
             }
         });
     }
@@ -312,10 +315,10 @@ class SocketServer
      * @param $global
      */
     private function debug($con,$global){
+        $debug=$global->get('debug');
+
         if(in_array($con->tag,$this->public_url)) {
             //public
-            $debug=$global->get('debug');
-
             if(isset($debug['public']) && $debug['public'][$con->tag]=='close'){
                 $this->log($con->tag.' debug '.json_encode($debug));
 
@@ -326,6 +329,14 @@ class SocketServer
             }
         }else{
             //private
+            if(isset($debug['private'][$con->tag_keysecret['key']]) && $debug['private'][$con->tag_keysecret['key']]=='close'){
+                $this->log($con->tag_keysecret['key'].' debug '.json_encode($debug));
+
+                $debug['private'][$con->tag_keysecret['key']]='recon';
+                $global->save('debug',$debug);
+
+                $con->close();
+            }
         }
     }
 

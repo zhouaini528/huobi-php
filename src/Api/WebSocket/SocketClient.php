@@ -62,7 +62,7 @@ class SocketClient
                 'connection'=>0,
             ]);
         }
-
+        //print_r($this->resub($sub));
         $this->save('add_sub',$this->resub($sub));
     }
 
@@ -206,7 +206,9 @@ class SocketClient
         ];
     }
 
-    function test_reconnection2(){
-        $this->client->debug2=1;
+    function test_reconnection2($key){
+        $this->client->debug=[
+            'private'=>[$key=>'close'],
+        ];
     }
 }
