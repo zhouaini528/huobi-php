@@ -118,7 +118,7 @@ class SocketServer
                 'auth'=>0,
             ]);
 
-            switch ($this->config['platform']){
+            switch ($this->getPlatform()){
                 case 'spot':{
                     $data=[
                         "action"=>"req",
