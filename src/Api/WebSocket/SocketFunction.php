@@ -101,7 +101,7 @@ trait SocketFunction
             //accessKey，signatureMethod，signatureVersion，timestamp
             $param_tmp=$this->sort($param);
             $host_tmp=explode('/', $host);
-            if(isset($host_tmp[1])) $temp="GET\n" . $host_tmp[2] . ":443\n" . '/ws/v2' . "\n" . implode('&', $param_tmp);
+            if(isset($host_tmp[1])) $temp="GET\n" . $host_tmp[2] . "\n" . '/ws/v2' . "\n" . implode('&', $param_tmp);
 
             $signature=base64_encode(hash_hmac('sha256', $temp ?? '', $keysecret['secret'], true));
 
