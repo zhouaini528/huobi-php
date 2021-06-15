@@ -20,7 +20,7 @@ class Order extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST /v1/order/batch-orders
      * */
@@ -30,7 +30,7 @@ class Order extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * POST /v1/order/orders/{order-id}/submitcancel
      * */
@@ -40,7 +40,7 @@ class Order extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * POST /v1/order/orders/submitCancelClientOrder
      * */
@@ -50,9 +50,9 @@ class Order extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
-     *GET /v1/order/openOrders 
+     *GET /v1/order/openOrders
      * */
     public function getOpenOrders(array $data=[]){
         $this->type='GET';
@@ -60,17 +60,17 @@ class Order extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST /v1/order/orders/batchCancelOpenOrders
      * */
     public function postBatchCancelOpenOrders(array $data=[]){
-        $this->type='GET';
+        $this->type='POST';
         $this->path='/v1/order/orders/batchCancelOpenOrders';
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *POST /v1/order/orders/batchcancel
      * */
@@ -80,7 +80,7 @@ class Order extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      *GET /v1/order/orders/{order-id}
      * */
@@ -90,7 +90,7 @@ class Order extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * GET /v1/order/orders/getClientOrder
      * */
@@ -100,7 +100,7 @@ class Order extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * GET /v1/order/orders/{order-id}/matchresults
      * */
@@ -110,7 +110,7 @@ class Order extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * GET /v1/order/orders
      * */
@@ -120,7 +120,7 @@ class Order extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * GET /v1/order/history
      * */
@@ -130,7 +130,7 @@ class Order extends Request
         $this->data=$data;
         return $this->exec();
     }
-    
+
     /**
      * GET /v1/order/matchresults
      * */
