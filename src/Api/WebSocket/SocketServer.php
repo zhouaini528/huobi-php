@@ -25,6 +25,8 @@ class SocketServer
 
     private $public_url=['market','kline'];
 
+    private $local_global=['public'=>[],'private'=>[]];
+
     function __construct(array $config=[])
     {
         $this->config=$config;
@@ -172,7 +174,9 @@ class SocketServer
                     $table=$this->userKey($con->tag_keysecret,$table);
                     $global->saveQueue($table,$data);
                 }else{
-                    $global->save($table,$data);
+                    //$global->save($table,$data);
+                    $this->local_global['public'][$table]=$data;
+                    //echo date('Y-m-d H:i:s',$data['tick']['ts']/1000).PHP_EOL;
 
                     //最后数据更新时间
                     $con->tag_data_time=time();
@@ -229,7 +233,8 @@ class SocketServer
                     $table=$this->userKey($con->tag_keysecret,$table);
                     $global->saveQueue($table,$data);
                 }else{
-                    $global->save($table,$data);
+                    //$global->save($table,$data);
+                    $this->local_global['public'][$table]=$data;
 
                     //最后数据更新时间
                     $con->tag_data_time=time();
@@ -306,6 +311,12 @@ class SocketServer
             }else{
                 //private
             }
+        });
+
+
+        //异步保存数据，不然会有阻塞问题。 0.2秒保存一次
+        Timer::add(0.2, function() use($global) {
+            $global->save('global_local',$this->local_global);
         });
     }
 
