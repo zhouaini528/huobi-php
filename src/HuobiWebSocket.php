@@ -84,4 +84,18 @@ class HuobiWebSocket
         return $this->client()->getSubscribes($callback,$daemon);
     }
 
+    /**
+     * Private channel reconnect
+     * @param string $key
+     */
+    public function reconPrivate(string $key){
+        $this->client()->reconPrivate($key);
+    }
+
+    /**
+     * Public channel reconnect
+     */
+    public function reconPublic(){
+        $this->client()->reconPublic();
+    }
 }
