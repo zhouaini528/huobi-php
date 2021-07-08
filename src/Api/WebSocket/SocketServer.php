@@ -346,6 +346,13 @@ class SocketServer
                 $debug['private'][$con->tag_keysecret['key']]='recon';
                 $global->save('debug',$debug);
 
+                //更改为掉线状态
+                $this->keysecretInit($con->tag_keysecret,[
+                    'connection'=>2,
+                    'connection_close'=>0,
+                    'auth'=>0,
+                ]);
+
                 $con->close();
             }
         }
@@ -402,7 +409,7 @@ class SocketServer
 
             $temp_sub=[];
             foreach ($temp['private'] as $v){
-                if($keysecret[$v[1]['key']]['auth']==0) continue;
+                if($keysecret[$v[1]['key']]['auth']!=1 || $keysecret[$v[1]['key']]['key']!=$con->tag_keysecret['key']) continue;
 
                 if($this->getPlatform()=='spot'){
                     $data=[
@@ -424,6 +431,7 @@ class SocketServer
 
                 $temp_sub[]=$v;
             }
+
 
             if(!empty($temp_sub)){
                 $global->addSubUpdate($temp_sub);
