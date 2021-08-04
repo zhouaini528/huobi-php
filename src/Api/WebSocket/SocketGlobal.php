@@ -111,6 +111,7 @@ trait SocketGlobal
     }
 
     protected function addSubUpdate($data=[]){
+
         do{
             $old_value=$new_value=$this->client->add_sub;
 
@@ -121,7 +122,7 @@ trait SocketGlobal
             }else{
                 foreach ($new_value as $k=>$v){
                     foreach ($data as $dk=>$dv){
-                        if($v[0]==$dv[0]){
+                        if($v[0]==$dv[0] && $v[1]['key']==$dv[1]['key']){
                             unset($data[$dk]);
                             unset($new_value[$k]);
                         }
