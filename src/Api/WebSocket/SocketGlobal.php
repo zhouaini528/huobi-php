@@ -122,7 +122,8 @@ trait SocketGlobal
             }else{
                 foreach ($new_value as $k=>$v){
                     foreach ($data as $dk=>$dv){
-                        if($v[0]==$dv[0] && $v[1]['key']==$dv[1]['key']){
+                        if($v[0]==$dv[0]){
+                            if(isset($v[1]['key']) && $v[1]['key']!=$dv[1]['key']) continue;
                             unset($data[$dk]);
                             unset($new_value[$k]);
                         }
