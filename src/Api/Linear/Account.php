@@ -12,6 +12,17 @@ use Lin\Huobi\Request;
 class Account extends Request
 {
     /**
+     *POST linear-swap-api/v1/swap_balance_valuation
+     * */
+    public function postAccountValuation(array $data=[]){
+        $this->type='POST';
+        $this->path='/linear-swap-api/v1/swap_balance_valuation';
+
+        $this->data=$data;
+        return $this->exec();
+    }
+
+    /**
      *POST linear-swap-api/v1/swap_account_info
      * */
     public function postAccountInfo(array $data=[]){
