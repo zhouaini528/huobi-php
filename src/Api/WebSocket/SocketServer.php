@@ -412,6 +412,7 @@ class SocketServer
 
             $temp_sub=[];
             foreach ($temp['private'] as $v){
+                if(!isset($con->tag_keysecret['key'])) continue;
                 if($keysecret[$v[1]['key']]['auth']!=1 || $keysecret[$v[1]['key']]['key']!=$con->tag_keysecret['key']) continue;
 
                 if($this->getPlatform()=='spot'){
