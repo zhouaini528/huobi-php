@@ -200,6 +200,16 @@ class Market extends Request
     }
 
     /**
+     *GET linear-swap-api/v1/swap_batch_funding_rate
+     * */
+    public function getBatchFundingRate(array $data=[]){
+        $this->type='GET';
+        $this->path='/linear-swap-api/v1/swap_batch_funding_rate';
+        $this->data=$data;
+        return $this->exec();
+    }
+
+    /**
      *GET linear-swap-api/v1/swap_historical_funding_rate
      * */
     public function getHistoricalFundingRate(array $data=[]){
