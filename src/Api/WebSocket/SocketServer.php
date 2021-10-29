@@ -175,7 +175,7 @@ class SocketServer
                     $global->saveQueue($table,$data);
                 }else{
                     //$global->save($table,$data);
-                    $this->local_global['public'][$table]=$data;
+                    if(isset($this->local_global['public'][$table])) $this->local_global['public'][$table]=$data;
                     //echo date('Y-m-d H:i:s',$data['tick']['ts']/1000).PHP_EOL;
 
                     //最后数据更新时间
@@ -234,7 +234,7 @@ class SocketServer
                     $global->saveQueue($table,$data);
                 }else{
                     //$global->save($table,$data);
-                    $this->local_global['public'][$table]=$data;
+                    if(isset($this->local_global['public'][$table])) $this->local_global['public'][$table]=$data;
 
                     //最后数据更新时间
                     $con->tag_data_time=time();
