@@ -133,7 +133,7 @@ class Request
     protected function send(){
         $client = new \GuzzleHttp\Client();
 
-        if(!empty($this->data)) {
+        if(!empty($this->data) && $this->type!='GET') {
             $this->options['body']=json_encode($this->data);
         }
 
