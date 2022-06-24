@@ -5,6 +5,7 @@
 
 namespace Lin\Huobi;
 
+use Lin\Huobi\Api\Spot\Reference;
 use Lin\Huobi\Api\Spot\Settings;
 use Lin\Huobi\Api\Spot\Subuser;
 use Lin\Huobi\Api\Spot\Order;
@@ -112,6 +113,13 @@ class HuobiSpot
      * */
     public function order(){
         return  new Order($this->init());
+    }
+
+    /**
+     *
+     * */
+    public function reference(){
+        return  new Reference($this->init());
     }
 
     /**
