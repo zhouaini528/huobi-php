@@ -106,7 +106,7 @@ class Order extends Request
      * */
     public function getMatchresults(array $data=[]){
         $this->type='GET';
-        $this->path='/v1/order/orders/{order-id}/matchresults';
+        $this->path='/v1/order/orders/'.$data['order-id'].'/matchresults';
         $this->data=$data;
         return $this->exec();
     }
