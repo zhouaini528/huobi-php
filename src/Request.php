@@ -44,7 +44,7 @@ class Request
     }
 
     /**
-     * 认证
+     *
      * */
     protected function auth(){
         $this->nonce();
@@ -57,14 +57,14 @@ class Request
     }
 
     /**
-     * 过期时间
+     *
      * */
     protected function nonce(){
         $this->nonce=gmdate('Y-m-d\TH:i:s');
     }
 
     /**
-     * 签名
+     *
      * */
     protected function signature(){
         if(empty($this->key)) return;
@@ -92,7 +92,7 @@ class Request
     }
 
     /**
-     * 根据huobi规则排序
+     *
      * */
     protected function sort($param)
     {
@@ -109,7 +109,7 @@ class Request
     }
 
     /**
-     * 默认头部信息
+     *
      * */
     protected function headers(){
         $this->headers=[
@@ -118,7 +118,7 @@ class Request
     }
 
     /**
-     * 请求设置
+     *
      * */
     protected function options(){
         if(isset($this->options['headers'])) $this->headers=array_merge($this->headers,$this->options['headers']);
@@ -128,7 +128,7 @@ class Request
     }
 
     /**
-     * 发送http
+     *
      * */
     protected function send(){
         $client = new \GuzzleHttp\Client();
@@ -143,16 +143,19 @@ class Request
 
         $response = $client->request($this->type, $this->host.$this->path.'?'.$this->signature, $this->options);
 
+        //echo $this->type.'   '.$this->host.$this->path.'?'.$this->signature.PHP_EOL;
+        //print_r($this->options);
+        //echo PHP_EOL;
+
         return $response->getBody()->getContents();
     }
 
     /*
-     * 执行流程
+     *
      * */
     protected function exec(){
         $this->auth();
 
-        //可以记录日志
         try {
             $temp=json_decode($this->send(),true);
             if(isset($temp['status']) && $temp['status']=='error') {
@@ -183,7 +186,6 @@ class Request
 
             $temp['_httpcode']=$e->getCode();
 
-            //TODO  该流程可以记录各种日志
             throw new Exception(json_encode($temp));
         }
     }
